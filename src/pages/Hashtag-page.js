@@ -3,8 +3,8 @@ import styled from "styled-components"
 export default function HashtagPage() {
     return (
         <Container>
-
-        
+            aaaaaaa
+        aaaaaaaa
         </Container>
     )
 }

@@ -18,8 +18,6 @@ export default function HashtagBox(){
     )
 }
 
-
-
 const Container = styled.div`
     width: 300px;
     background-color: #171717;

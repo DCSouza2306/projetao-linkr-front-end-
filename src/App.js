@@ -9,7 +9,7 @@ function App() {
 
 
       <Routes>
-        <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
+        <Route path="/hashtag/?:hashtag" element={<HashtagPage />} />
       </Routes>
     </BrowserRouter>
 
