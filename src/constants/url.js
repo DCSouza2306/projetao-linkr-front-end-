@@ -1,1 +1,1 @@
-export const URL_BASE = "teste"
+export const URL_BASE = "http://localhost:4000"
