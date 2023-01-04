@@ -9,6 +9,34 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [enable, setEnable] = useState(false);
   const navigate = useNavigate();
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  function login(e){
+    e.preventDefault();
+
+    if (email === "" || password === "") {
+      alert("Todos os campos devem ser preenchidos");
+      return;
+    }
+
+    setEnable(true);
+
+    const newLogin ={
+      email: email,
+      password: password
+    }
+
+    axios
+    .post(`${URL_BASE}/`, newLogin)
+    .then((res) =>{
+      localStorage.setItem("token",JSON.stringify(res.data));
+      alert("login com sucesso")
+    }).catch((e) => {
+      alert(e.response.data.message);
+      setEnable(false)
+    })
+  }
+
   return (
     <SignUpContainer>
       <div className="left-box-sign-up">
@@ -19,7 +47,7 @@ export default function LoginPage() {
       </div>
 
       <div className="right-box-sign-up">
-        <form>
+        <form onSubmit={login} >
           <input
             type="email"
             placeholder="e-mail"
