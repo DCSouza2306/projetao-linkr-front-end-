@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
+import GeneralPost from "../components/General-Post"
 import HashtagBox from "../components/Hashtag-box"
 import Header from "../components/Header"
 
@@ -12,10 +13,10 @@ export default function HashtagPage() {
             <Header />
             <div className="content">
                 <div className="timeLineContainer">
-                    <h2>{hashtag}</h2>
+                    <h2>#{hashtag}</h2>
 
                     <div className="timeLine">
-                     
+                        
                     </div>
                 </div>
                 <div className="sideBar">
