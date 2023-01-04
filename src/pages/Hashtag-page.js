@@ -1,10 +1,13 @@
 import styled from "styled-components"
+import Header from "../components/Header"
 
 export default function HashtagPage() {
     return (
         <Container>
-            aaaaaaa
-        aaaaaaaa
+            <Header />
+
+
+
         </Container>
     )
 }
