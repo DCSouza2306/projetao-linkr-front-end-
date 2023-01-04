@@ -2,8 +2,47 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { URL_BASE } from "../constants/url";
 
 export default function SignUpPage() {
+  const [name, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [urlPicture, setUrlPicture] = useState("");
+  const [enable, setEnable] = useState(false);
+  const navigate = useNavigate();
+
+  function signUp(e) {
+    e.preventDefault();
+    if (name === "" || email === "" || password === "" || urlPicture === "") {
+      alert("Todos os campos devem ser preenchidos");
+      return;
+    }
+
+    setEnable(true);
+
+    const newUser = {
+      email,
+      password,
+      name,
+      urlPicture,
+    };
+
+    axios
+      .post(`${URL_BASE}/sign-up`, newUser)
+      .then((res) => {
+        if(res.data.message){
+            alert(res.data.message)
+            setEnable(false);
+            return;
+        }
+        navigate("/");
+      })
+      .catch((err) => {
+        alert(err.response.data.message);
+        setEnable(false);
+      });
+  }
   return (
     <SignUpContainer>
       <div className="left-box-sign-up">
@@ -14,20 +53,48 @@ export default function SignUpPage() {
       </div>
 
       <div className="right-box-sign-up">
-        <form>
-          <input type="email" placeholder="e-mail" />
-          <input type="password" placeholder="password" />
-          <input type="text" placeholder="username" />
-          <input type="text" placeholder="picture url" />
-          <button className="button-sign-up">Sign Up</button>
+        <form onSubmit={signUp}>
+          <input
+            type="email"
+            placeholder="e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={enable}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={enable}
+          />
+          <input
+            type="text"
+            placeholder="username"
+            value={name}
+            onChange={(e) => setUserName(e.target.value)}
+            disabled={enable}
+          />
+          <input
+            type="text"
+            placeholder="picture url"
+            value={urlPicture}
+            onChange={(e) => setUrlPicture(e.target.value)}
+            disabled={enable}
+          />
+          <button className="button-sign-up" type="submit" disabled={enable}>
+            <p>Sign Up</p>
+          </button>
         </form>
-        <button>Switch back to log in</button>
+        <Link to="/">
+          <button>Switch back to log in</button>
+        </Link>
       </div>
     </SignUpContainer>
   );
 }
 
-const SignUpContainer = styled.div`
+export const SignUpContainer = styled.div`
   width: 100vw;
   height: 100vh;
   font-family: "Passion One", cursive;
@@ -77,7 +144,6 @@ const SignUpContainer = styled.div`
         font-size: 27px;
         font-family: "Passion One", cursive;
         color: #9f9f9f;
-        
       }
 
       .button-sign-up {
@@ -94,16 +160,16 @@ const SignUpContainer = styled.div`
       }
     }
 
-    button{
-        background-color: #333333;
-        font-size: 20px;
-        color: #ffffff;
-        text-decoration: underline;
-        border: none;
+    button {
+      background-color: #333333;
+      font-size: 20px;
+      color: #ffffff;
+      text-decoration: underline;
+      border: none;
 
-        :hover{
-            cursor: pointer;
-        }
+      :hover {
+        cursor: pointer;
+      }
     }
   }
 `;
