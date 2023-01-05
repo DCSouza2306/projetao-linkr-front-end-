@@ -3,13 +3,20 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL_BASE } from "../constants/url";
+import { AuthContext } from "../context/auth-context";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [enable, setEnable] = useState(false);
+  const {setUserData} = React.useContext(AuthContext)
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token"));
+
+  if(token){
+    setUserData(token);
+    navigate("/hashtag")
+  }
 
   function login(e){
     e.preventDefault();
@@ -30,7 +37,7 @@ export default function LoginPage() {
     .post(`${URL_BASE}/`, newLogin)
     .then((res) =>{
       localStorage.setItem("token",JSON.stringify(res.data));
-      alert("login com sucesso")
+      navigate("/hashtag")
     }).catch((e) => {
       alert(e.response.data.message);
       setEnable(false)
