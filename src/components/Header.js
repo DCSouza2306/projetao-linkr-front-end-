@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [showLoggoutBox, setShowLoggoutBox] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   function toggleLogout() {
     setShowLoggoutBox(!showLoggoutBox);
   }
 
-  function logout(){
+  function logout() {
     localStorage.clear();
-    navigate("/")
+    navigate("/");
   }
 
   return (
@@ -35,14 +35,16 @@ export default function Header() {
           onClick={() => toggleLogout()}
           src="https://img.freepik.com/fotos-gratis/estilo-de-vida-beleza-e-moda-conceito-de-emocoes-de-pessoas-jovem-gerente-de-escritorio-feminino-asiatico-ceo-com-expressao-satisfeita-em-pe-sobre-um-fundo-branco-sorrindo-com-os-bracos-cruzados-sobre-o-peito_1258-59329.jpg?w=2000"
         />
-        <div className="logoutBox" onClick={logout} >Logout</div>
+        <div className="logoutBox" onClick={logout}>
+          Logout
+        </div>
       </div>
     </Container>
   );
 }
 
 const Container = styled.header`
-  width: 100vw;
+  width: 100%;
   height: 72px;
   display: flex;
   align-items: center;
@@ -70,8 +72,8 @@ const Container = styled.header`
     justify-content: center;
     border-radius: 0 0 0 20px;
 
-    :hover{
-        cursor: pointer;
+    :hover {
+      cursor: pointer;
     }
   }
 

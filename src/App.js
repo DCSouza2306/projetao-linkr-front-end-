@@ -4,6 +4,8 @@ import SignUpPage from "./pages/SignUp-page";
 import LoginPage from "./pages/Login-page";
 import GlobalStyle from "./components/Global-style";
 
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -11,7 +13,8 @@ function App() {
 
 
       <Routes>
-        <Route path="/hashtag" element={<HashtagPage />} />
+        <Route path="/hashtag/:hashtag" element={<HashtagPage />} />
+ 
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/" element={<LoginPage />} />
       </Routes>
