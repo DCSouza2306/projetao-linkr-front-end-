@@ -1,25 +1,55 @@
 import styled from 'styled-components';
 import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/auth-context';
+import React from 'react';
 
 export default function Header() {
 	const [showLoggoutBox, setShowLoggoutBox] = useState(false);
+	const navigate = useNavigate();
+	const { userData } = React.useContext(AuthContext);
 
 	function toggleLogout() {
-		setShowLoggoutBox(!showLoggoutBox);
-		console.log('OI');
+		document.onclick = () => {
+			setShowLoggoutBox(!showLoggoutBox);
+		};
+	}
+
+	if (showLoggoutBox) {
+		document.onclick = () => {
+			setShowLoggoutBox(false);
+		};
+	}
+
+	function logout() {
+		localStorage.clear();
+		navigate('/');
 	}
 
 	return (
 		<Container showLoggoutBox={showLoggoutBox}>
 			<h1>linkr</h1>
 			<div>
-				<IoIosArrowDown
+				<IoIosArrowUp
+					display={showLoggoutBox ? '' : 'none'}
 					className="arrowIcon"
 					onClick={() => toggleLogout()}
 				/>
-				<img src="https://img.freepik.com/fotos-gratis/estilo-de-vida-beleza-e-moda-conceito-de-emocoes-de-pessoas-jovem-gerente-de-escritorio-feminino-asiatico-ceo-com-expressao-satisfeita-em-pe-sobre-um-fundo-branco-sorrindo-com-os-bracos-cruzados-sobre-o-peito_1258-59329.jpg?w=2000" />
-				<div className="logoutBox">Logout</div>
+				<IoIosArrowDown
+					display={showLoggoutBox ? 'none' : ''}
+					className="arrowIcon"
+					onClick={() => toggleLogout()}
+				/>
+				<img
+					onClick={() => toggleLogout()}
+					src={userData.urlImage}
+					alt="User Icon"
+				/>
+				<div className="logoutBox" onClick={logout}>
+					Logout
+				</div>
 			</div>
 		</Container>
 	);
@@ -58,6 +88,10 @@ const Container = styled.header`
 		align-items: center;
 		justify-content: center;
 		border-radius: 0 0 0 20px;
+
+		:hover {
+			cursor: pointer;
+		}
 	}
 
 	.arrowIcon {
@@ -82,5 +116,9 @@ const Container = styled.header`
 		border-radius: 30000px;
 		margin-right: 32px;
 		object-fit: fill;
+
+		:hover {
+			cursor: pointer;
+		}
 	}
 `;
