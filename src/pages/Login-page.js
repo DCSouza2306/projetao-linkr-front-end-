@@ -15,7 +15,7 @@ export default function LoginPage() {
 
   if(token){
     setUserData(token);
-    navigate("/hashtag")
+    navigate("/hashtag/react")
   }
 
   function login(e){
@@ -37,7 +37,7 @@ export default function LoginPage() {
     .post(`${URL_BASE}/`, newLogin)
     .then((res) =>{
       localStorage.setItem("token",JSON.stringify(res.data));
-      navigate("/hashtag")
+      navigate("/hashtag/react")
     }).catch((e) => {
       alert(e.response.data.message);
       setEnable(false)

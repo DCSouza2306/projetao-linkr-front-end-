@@ -3,13 +3,24 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth-context";
+import React from "react";
 
 export default function Header() {
   const [showLoggoutBox, setShowLoggoutBox] = useState(false);
   const navigate = useNavigate();
+  const { userData } = React.useContext(AuthContext);
 
   function toggleLogout() {
-    setShowLoggoutBox(!showLoggoutBox);
+    document.onclick = () => {
+      setShowLoggoutBox(!showLoggoutBox);
+    };
+  }
+
+  if (showLoggoutBox) {
+    document.onclick = () => {
+      setShowLoggoutBox(false);
+    };
   }
 
   function logout() {
@@ -33,7 +44,8 @@ export default function Header() {
         />
         <img
           onClick={() => toggleLogout()}
-          src="https://img.freepik.com/fotos-gratis/estilo-de-vida-beleza-e-moda-conceito-de-emocoes-de-pessoas-jovem-gerente-de-escritorio-feminino-asiatico-ceo-com-expressao-satisfeita-em-pe-sobre-um-fundo-branco-sorrindo-com-os-bracos-cruzados-sobre-o-peito_1258-59329.jpg?w=2000"
+          src={userData.urlImage}
+          alt="User Icon"
         />
         <div className="logoutBox" onClick={logout}>
           Logout
