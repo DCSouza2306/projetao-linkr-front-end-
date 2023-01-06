@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import AddPost from '../components/Add-Post';
 import GeneralPost from '../components/General-Post';
 import Header from '../components/Header';
 import { URL_BASE } from '../constants/url';
@@ -23,7 +24,11 @@ export default function TimelinePage(params) {
 	return (
 		<>
 			<Header />
-			<Wrapper>{posts.map(GeneralPost)}</Wrapper>
+
+			<Wrapper>
+				<AddPost />
+				{posts.map(GeneralPost)}
+			</Wrapper>
 		</>
 	);
 }
@@ -32,7 +37,6 @@ const Wrapper = styled.div`
 	background-color: #333333;
 	padding-top: 100px;
 	width: 100vw;
-	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

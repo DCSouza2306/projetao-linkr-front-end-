@@ -31,6 +31,7 @@ const Container = styled.div`
 	background-color: #171717;
 	color: #ffffff;
 	width: 611px;
+	font-family: 'Lato', sans-serif;
 
 	.headerPost {
 		display: flex;
