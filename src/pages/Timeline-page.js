@@ -18,7 +18,6 @@ export default function TimelinePage(params) {
 		axios
 			.get(`${URL_BASE}/posts`)
 			.then((res) => {
-				console.log(res.data);
 				setPosts(res.data);
 				setIsLoading(false);
 			})
