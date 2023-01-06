@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { Ring } from 'react-awesome-spinners';
 
-export default function LoadingMessage() {
+export default function LoadingMessage({zIndex}) {
 	return (
-		<LoadingMessageWrapper>
+		<LoadingMessageWrapper zIndex={zIndex}>
 			<Ring color={'#ffffff'} />
 			<h1>Loading</h1>
 		</LoadingMessageWrapper>
@@ -21,4 +21,6 @@ const LoadingMessageWrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	margin-top: 25px;
+	z-index: ${props => props.zIndex == "10" ? "10" : "none"};
+	position: ${props => props.zIndex == "10"? "fixed": "static"}
 `;

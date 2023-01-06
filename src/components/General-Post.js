@@ -6,30 +6,23 @@ import { AuthContext } from "../context/auth-context";
 import Modal from "react-modal";
 import React, { useState, useEffect } from "react";
 
+export default function GeneralPost({
+  id,
+  urlImage,
+  name,
+  content,
+  link,
+  setModalIsOpen,
+  setIdPost,
+}) {
+  
 
-export default function GeneralPost({ id, urlImage, name, content, link, setModalIsOpen}) {
-	  
-
- 
-  const { userData } = React.useContext(AuthContext);
-  const config = {
-    headers: { Authorization: `Bearer ${userData.token}` },
-  };
-
-
- 
-
-  function deletePost() {
-    axios
-      .delete(`${URL_BASE}/posts/${id}`, config)
-      .then(() => {
-        alert("deletou");
-        window.location.reload();
-      })
-      .catch((e) => {
-        console.log(e.response.data.message);
-      });
+  function openModal() {
+    setModalIsOpen(true);
+	setIdPost(id);
   }
+
+
   return (
     <Container>
       <div className="post" key={id}>
@@ -45,7 +38,7 @@ export default function GeneralPost({ id, urlImage, name, content, link, setModa
                 <AiFillEdit className="icon-button" />
                 <AiFillDelete
                   className="icon-button"
-                  onClick={()=>setModalIsOpen(true)}
+                  onClick={() => openModal()}
                 />
               </div>
             </div>
@@ -69,8 +62,6 @@ const Container = styled.div`
   color: #ffffff;
   width: 611px;
   font-family: "Lato", sans-serif;
-
- 
 
   .headerPost {
     display: flex;
