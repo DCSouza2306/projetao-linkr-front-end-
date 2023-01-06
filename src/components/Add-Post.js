@@ -1,11 +1,48 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { URL_BASE } from '../constants/url.js';
 import { AuthContext } from '../context/auth-context.js';
 
 export default function AddPost() {
 	const [linkInput, setLinkInput] = useState('');
 	const [contentInput, setContentInput] = useState('');
 	const { userData } = React.useContext(AuthContext);
+	const [isDisabled, setIsDisabled] = useState(false);
+
+	function handlePublish(e) {
+		e.preventDefault();
+		setIsDisabled(true);
+
+		if (linkInput.length === 0) {
+			alert('Preencha o link!');
+			setIsDisabled(false);
+			return;
+		}
+
+		const body = {
+			link: linkInput,
+			content: contentInput,
+		};
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userData.token}`,
+			},
+		};
+
+		axios
+			.post(`${URL_BASE}/posts`, body, config)
+			.then((res) => {
+				setContentInput('');
+				setLinkInput('');
+				setIsDisabled(false);
+			})
+			.catch((err) => {
+				console.log(err.response.data.message);
+				alert('Houve um erro ao publicar seu link');
+				setIsDisabled(false);
+			});
+	}
 
 	return (
 		<NewPostWrapper>
@@ -13,18 +50,26 @@ export default function AddPost() {
 
 			<div>
 				<h1>What are you going to share today?</h1>
-				<PublishForm action="">
+				<PublishForm onSubmit={handlePublish}>
 					<input
 						className="urlInput"
 						type="text"
 						placeholder="http://..."
+						value={linkInput}
+						onChange={(e) => setLinkInput(e.target.value)}
+						disabled={isDisabled}
 					/>
 					<input
 						className="textInput"
 						type="text"
 						placeholder="Awesome article about #javascript"
+						value={contentInput}
+						onChange={(e) => setContentInput(e.target.value)}
+						disabled={isDisabled}
 					/>
-					<button type="submit">Publish</button>
+					<button type="submit" disabled={isDisabled}>
+						{!isDisabled ? 'Publish' : 'Publishing...'}
+					</button>
 				</PublishForm>
 			</div>
 		</NewPostWrapper>
@@ -75,6 +120,7 @@ const PublishForm = styled.form`
 		border: none;
 		margin-bottom: 5px;
 		font-weight: 300;
+		font-size: 15px;
 	}
 
 	.urlInput {
@@ -92,5 +138,6 @@ const PublishForm = styled.form`
 		background-color: #1877f2;
 		color: #ffffff;
 		font-weight: 700;
+		font-size: 14px;
 	}
 `;

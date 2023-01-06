@@ -7,7 +7,7 @@ export default function GeneralPost({ id, urlImage, name, content, link }) {
 			<div className="post" key={id}>
 				<div className="headerPost">
 					<div className="leftSide">
-						<img src={urlImage} />
+						<img src={urlImage} alt="profile picture" />
 						<AiOutlineHeart className="iconHeart" />
 					</div>
 					<div className="rightSide">
