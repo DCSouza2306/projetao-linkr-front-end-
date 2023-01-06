@@ -25,7 +25,7 @@ export default function TimelinePage(params) {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [idPost, setIdPost] = useState("")
 	const [posts, setPosts] = useState([]);
-	const { refreshTimeline } = React.useContext(AuthContext);
+	const { refreshTimeline, userData } = React.useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(true);
   
 	function closeModal() {

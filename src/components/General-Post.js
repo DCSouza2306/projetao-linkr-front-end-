@@ -5,7 +5,10 @@ import {
   AiFillEdit,
   AiFillHeart,
 } from "react-icons/ai";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { URL_BASE } from "../constants/url";
+import { AuthContext } from "../context/auth-context";
 
 export default function GeneralPost({
   id,
@@ -17,6 +20,22 @@ export default function GeneralPost({
   setIdPost,
 }) {
   const [isLiked, setIsLiked] = useState(false);
+  const [openTextArea, setOpenTextArea] = useState(false);
+  const [contentChange, setContentChange] = useState(content);
+  const [enableInput, setEnableInput] = useState(false);
+  const { userData, setRefreshTimeline, refreshTimeline } =
+    React.useContext(AuthContext);
+  const inputRef = useRef();
+  const config = {
+    headers: { Authorization: `Bearer ${userData.token}` },
+  };
+
+  useEffect(() => {
+    if (openTextArea) {
+      inputRef.current.focus();
+    }
+    setContentChange(content);
+  }, [openTextArea]);
 
   function likePost() {
     if (isLiked === false) {
@@ -31,6 +50,36 @@ export default function GeneralPost({
     setModalIsOpen(true);
     setIdPost(id);
   }
+
+
+  function changeContent(e) {
+    e.preventDefault();
+    setEnableInput(true)
+    setOpenTextArea(true);
+    const textChange = {
+      content: contentChange,
+    };
+    axios
+      .patch(`${URL_BASE}/posts/${id}`, textChange, config)
+      .then(() => {
+        setEnableInput(false)
+        setOpenTextArea(false)
+        setRefreshTimeline(!refreshTimeline);
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+        setEnableInput(false)
+      });
+  }
+
+  document.onkeydown = (e) => {
+    if (e.key === "Escape") {
+      setOpenTextArea(false);
+    }
+    if (e.key === "Enter" && openTextArea) {
+      changeContent();
+    }
+  };
 
   return (
     <Container>
@@ -54,14 +103,28 @@ export default function GeneralPost({
             <div className="name-buttons">
               <p className="name">{name}</p>
               <div className="buttons-edit-delete">
-                <AiFillEdit className="icon-button" />
+                <AiFillEdit
+                  className="icon-button"
+                  onClick={() => setOpenTextArea(!openTextArea)}
+                />
                 <AiFillDelete
                   className="icon-button"
                   onClick={() => openModal()}
                 />
               </div>
             </div>
-            <p className="a">{content}</p>
+            {openTextArea && (
+              <form onSubmit={changeContent}>
+                <input
+                  disabled={enableInput}
+                  className="input-change-text"
+                  value={contentChange}
+                  ref={inputRef}
+                  onChange={(e) => setContentChange(e.target.value)}
+                />
+              </form>
+            )}
+            {!openTextArea && <p className="a">{content}</p>}
           </div>
         </div>
         <div className="linkEmbed">
@@ -92,7 +155,16 @@ const Container = styled.div`
     height: 50px;
     border-radius: 100%;
     position: absolute;
-    top: 16px;
+    top: 0px;
+  }
+
+  .input-change-text {
+    width: 503px;
+    height: 44px;
+    font-size: 16px;
+    font-family: "Lato", sans-serif;
+    border-radius: 10px;
+    padding: 0;
   }
 
   .iconHeart {
