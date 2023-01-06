@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { AiOutlineHeart, AiFillDelete, AiFillEdit } from "react-icons/ai";
-import { URL_BASE } from "../constants/url";
-import axios from "axios";
-import { AuthContext } from "../context/auth-context";
-import Modal from "react-modal";
+import {
+  AiOutlineHeart,
+  AiFillDelete,
+  AiFillEdit,
+  AiFillHeart,
+} from "react-icons/ai";
 import React, { useState, useEffect } from "react";
 
 export default function GeneralPost({
@@ -15,13 +16,21 @@ export default function GeneralPost({
   setModalIsOpen,
   setIdPost,
 }) {
-  
+  const [isLiked, setIsLiked] = useState(false);
+
+  function likePost() {
+    if (isLiked === false) {
+      //Envia para a tabela likes o id do usuario e o id do post
+    } else {
+      //Exclui da tabela likes
+    }
+    setIsLiked(!isLiked);
+  }
 
   function openModal() {
     setModalIsOpen(true);
-	setIdPost(id);
+    setIdPost(id);
   }
-
 
   return (
     <Container>
@@ -29,7 +38,17 @@ export default function GeneralPost({
         <div className="headerPost">
           <div className="leftSide">
             <img src={urlImage} alt="profile picture" />
-            <AiOutlineHeart className="iconHeart" />
+            {isLiked ? (
+              <AiFillHeart
+                className="iconFillHeart"
+                onClick={() => likePost()}
+              />
+            ) : (
+              <AiOutlineHeart
+                className="iconHeart"
+                onClick={() => likePost()}
+              />
+            )}
           </div>
           <div className="rightSide">
             <div className="name-buttons">
