@@ -7,7 +7,8 @@ import { AuthContext } from '../context/auth-context.js';
 export default function AddPost() {
 	const [linkInput, setLinkInput] = useState('');
 	const [contentInput, setContentInput] = useState('');
-	const { userData } = React.useContext(AuthContext);
+	const { userData, refreshTimeline, setRefreshTimeline } =
+		React.useContext(AuthContext);
 	const [isDisabled, setIsDisabled] = useState(false);
 
 	function handlePublish(e) {
@@ -36,6 +37,7 @@ export default function AddPost() {
 				setContentInput('');
 				setLinkInput('');
 				setIsDisabled(false);
+				setRefreshTimeline(!refreshTimeline);
 			})
 			.catch((err) => {
 				console.log(err.response.data.message);

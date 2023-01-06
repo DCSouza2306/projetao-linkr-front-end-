@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AddPost from '../components/Add-Post';
 import GeneralPost from '../components/General-Post';
 import Header from '../components/Header';
 import { URL_BASE } from '../constants/url';
+import { AuthContext } from '../context/auth-context';
 
 export default function TimelinePage(params) {
 	const [posts, setPosts] = useState([]);
+	const { refreshTimeline } = React.useContext(AuthContext);
 
 	useEffect(() => {
 		axios
@@ -19,7 +21,7 @@ export default function TimelinePage(params) {
 			.catch((err) => {
 				console.log(err.data);
 			});
-	}, []);
+	}, [refreshTimeline]);
 
 	return (
 		<>
