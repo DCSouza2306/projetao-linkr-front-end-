@@ -81,6 +81,7 @@ const Container = styled.div`
   color: #ffffff;
   width: 611px;
   font-family: "Lato", sans-serif;
+  padding: 16px 24px 16px 0;
 
   .headerPost {
     display: flex;
@@ -101,8 +102,20 @@ const Container = styled.div`
     margin-top: 8px;
     cursor: pointer;
     position: absolute;
-    top: 72px;
+    top: 56px;
   }
+
+  .iconFillHeart {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    margin-top: 8px;
+    cursor: pointer;
+    position: absolute;
+    top: 56px;
+    color: red;
+  }
+
   .leftSide {
     width: 15%;
     display: flex;
@@ -114,8 +127,6 @@ const Container = styled.div`
 
   .rightSide {
     width: 85%;
-    margin-top: 16px;
-    margin-left: 8px;
     overflow-wrap: break-word;
 
     .name-buttons {
@@ -142,11 +153,11 @@ const Container = styled.div`
 
   .linkEmbed {
     display: flex;
-    justify-content: center;
+    justify-content: end;
   }
 
   iframe {
-    width: 90%;
+    width: 85%;
     height: 80%;
     margin-top: 8px;
     margin-bottom: 16px;
