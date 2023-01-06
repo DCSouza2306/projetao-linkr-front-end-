@@ -8,8 +8,8 @@ import React from 'react';
 
 export default function Header() {
 	const [showLoggoutBox, setShowLoggoutBox] = useState(false);
-	const navigate = useNavigate();
 	const { userData } = React.useContext(AuthContext);
+	const navigate = useNavigate();
 
 	function toggleLogout() {
 		document.onclick = () => {
@@ -28,8 +28,6 @@ export default function Header() {
 		navigate('/');
 	}
 
-	console.log(userData.urlImage)
-
 	return (
 		<Container showLoggoutBox={showLoggoutBox}>
 			<h1>linkr</h1>
@@ -46,7 +44,7 @@ export default function Header() {
 				/>
 				<img
 					onClick={() => toggleLogout()}
-					src={userData.urlImage}
+					src={userData?.urlImage}
 					alt="User Icon"
 				/>
 				<div className="logoutBox" onClick={logout}>

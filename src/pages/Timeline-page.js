@@ -25,14 +25,16 @@ export default function TimelinePage(params) {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [idPost, setIdPost] = useState("")
 	const [posts, setPosts] = useState([]);
-	const { refreshTimeline, userData } = React.useContext(AuthContext);
+	const { refreshTimeline, setUserData } = React.useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(true);
+	const token = JSON.parse(localStorage.getItem('token'));
   
 	function closeModal() {
 	  setModalIsOpen(false);
 	}
   
 	useEffect(() => {
+		setUserData(token);
 	  axios
 		.get(`${URL_BASE}/posts`)
 		.then((res) => {
@@ -52,6 +54,7 @@ export default function TimelinePage(params) {
 		<Header />
   
 		<Wrapper>
+
 		  {modalIsOpen ? <Modal
 			isOpen={modalIsOpen}
 			onRequestClose={closeModal}
@@ -63,8 +66,6 @@ export default function TimelinePage(params) {
 			className="modal-content"
 			/>: null}
   
-  
-  
 		  <AddPost />
 		  {isLoading && <LoadingMessage />}
 		  {posts.length === 0 && isLoading === false ? (
@@ -73,6 +74,7 @@ export default function TimelinePage(params) {
 			posts.map((p) =>  
 			  <GeneralPost
 				id={p.id}
+				userId={p["user-id"]}
 				urlImage={p.urlImage}
 				name={p.name}
 				content={p.content}

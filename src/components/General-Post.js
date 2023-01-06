@@ -13,6 +13,7 @@ import { AuthContext } from "../context/auth-context";
 export default function GeneralPost({
   id,
   urlImage,
+  userId,
   name,
   content,
   link,
@@ -23,11 +24,12 @@ export default function GeneralPost({
   const [openTextArea, setOpenTextArea] = useState(false);
   const [contentChange, setContentChange] = useState(content);
   const [enableInput, setEnableInput] = useState(false);
+  const [enableButtons, setEnableButtons] = useState(false)
   const { userData, setRefreshTimeline, refreshTimeline } =
     React.useContext(AuthContext);
   const inputRef = useRef();
   const config = {
-    headers: { Authorization: `Bearer ${userData.token}` },
+    headers: { Authorization: `Bearer ${userData?.token}` },
   };
 
   useEffect(() => {
@@ -67,8 +69,8 @@ export default function GeneralPost({
         setRefreshTimeline(!refreshTimeline);
       })
       .catch((e) => {
-        alert(e.response.data.message);
         setEnableInput(false)
+        alert(e.response.data.message);
       });
   }
 
@@ -80,10 +82,19 @@ export default function GeneralPost({
       changeContent();
     }
   };
+  const elemento = document.querySelector(".post")
+
+  function passouMouse(){
+    setEnableButtons(true)
+  }
+
+  function tirouMouse(){
+    setEnableButtons(false)
+  }
 
   return (
-    <Container>
-      <div className="post" key={id}>
+    <Container showButtons={userId == userData?.userId} enableButtons={enableButtons}>
+      <div className="post" key={id} onMouseEnter={passouMouse} onMouseLeave={tirouMouse} >
         <div className="headerPost">
           <div className="leftSide">
             <img src={urlImage} alt="profile picture" />
@@ -204,6 +215,7 @@ const Container = styled.div`
     .name-buttons {
       display: flex;
       justify-content: space-between;
+      height: 25px;
 
       .buttons-edit-delete {
         margin-right: 20px;
@@ -211,16 +223,14 @@ const Container = styled.div`
         display: flex;
         justify-content: space-around;
         font-size: 20px;
+        display: ${props => props.showButtons && props.enableButtons ? "": "none"};
 
-        .icon-button:hover {
+        .icon-button {
           cursor: pointer;
         }
       }
     }
 
-    .a {
-      margin-top: 8px;
-    }
   }
 
   .linkEmbed {
