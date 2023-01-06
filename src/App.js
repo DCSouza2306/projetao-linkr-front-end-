@@ -7,6 +7,7 @@ import TimelinePage from './pages/Timeline-page';
 import Modal from "react-modal";
 Modal.setAppElement("#root");
 
+
 function App() {
 	return (
 		<BrowserRouter>
