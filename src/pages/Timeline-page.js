@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import AddPost from '../components/Add-Post';
 import GeneralPost from '../components/General-Post';
 import Header from '../components/Header';
+import LoadingMessage from '../components/LoadingMessage';
 import { URL_BASE } from '../constants/url';
 import { AuthContext } from '../context/auth-context';
 
@@ -29,7 +30,13 @@ export default function TimelinePage(params) {
 
 			<Wrapper>
 				<AddPost />
-				{posts.map(GeneralPost)}
+				{posts.length != 0 ? (
+					posts.map(GeneralPost)
+				) : (
+					<LoadingMessage />
+				)}
+				{/* <LoadingMessage />
+				{posts.map(GeneralPost)} */}
 			</Wrapper>
 		</>
 	);
