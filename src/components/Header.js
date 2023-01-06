@@ -28,6 +28,8 @@ export default function Header() {
 		navigate('/');
 	}
 
+	console.log(userData.urlImage)
+
 	return (
 		<Container showLoggoutBox={showLoggoutBox}>
 			<h1>linkr</h1>

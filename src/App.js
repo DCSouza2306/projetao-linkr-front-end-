@@ -4,6 +4,8 @@ import SignUpPage from './pages/SignUp-page';
 import LoginPage from './pages/Login-page';
 import GlobalStyle from './components/Global-style';
 import TimelinePage from './pages/Timeline-page';
+import Modal from "react-modal";
+Modal.setAppElement("#root");
 
 function App() {
 	return (
