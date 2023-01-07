@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { URL_BASE } from "../constants/url.js";
 import { AuthContext } from "../context/auth-context.js";
+import Swal from "sweetalert2";
 
 export default function AddPost() {
   const [linkInput, setLinkInput] = useState("");
@@ -16,7 +17,13 @@ export default function AddPost() {
     setIsDisabled(true);
 
     if (linkInput.length === 0) {
-      alert("Preencha o link!");
+      Swal.fire({
+        width: "300px",
+        title: "Atention",
+        text: "Fill all fields",
+        icon: "info",
+        button: "OK",
+        });
       setIsDisabled(false);
       return;
     }
@@ -41,7 +48,13 @@ export default function AddPost() {
       })
       .catch((err) => {
         console.log(err.response.data.message);
-        alert("Houve um erro ao publicar seu link");
+        Swal.fire({
+          width: "300px",
+          title: "Error",
+          text: "Can not publish your link",
+          icon: "error",
+          button: "OK",
+          });
         setIsDisabled(false);
       });
   }

@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
+import Swal from "sweetalert2";
 
 export default function GeneralPost({
   id,
@@ -70,7 +71,14 @@ export default function GeneralPost({
       })
       .catch((e) => {
         setEnableInput(false)
-        alert(e.response.data.message);
+        Swal.fire({
+          width: "300px",
+          title: "Error",
+          text: e.response.data.message,
+          icon: "error",
+          button: "OK",
+          closeOnEsc: true,
+        });
       });
   }
 
@@ -82,7 +90,6 @@ export default function GeneralPost({
       changeContent();
     }
   };
-  const elemento = document.querySelector(".post")
 
   function passouMouse(){
     setEnableButtons(true)

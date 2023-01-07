@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL_BASE } from "../constants/url";
+import Swal from "sweetalert2";
 
 export default function SignUpPage() {
   const [name, setUserName] = useState("");
@@ -11,11 +12,23 @@ export default function SignUpPage() {
   const [urlPicture, setUrlPicture] = useState("");
   const [enable, setEnable] = useState(false);
   const navigate = useNavigate();
+  const inputRef = useRef()
+
+  useEffect(() =>{
+	inputRef.current.focus();
+  },[])
 
   function signUp(e) {
     e.preventDefault();
     if (name === "" || email === "" || password === "" || urlPicture === "") {
-      alert("Todos os campos devem ser preenchidos");
+      Swal.fire({
+        width: "300px",
+        title: "Atention",
+        text: "All fields must be filled in",
+        icon: "info",
+        button: "OK",
+        closeOnEsc: true,
+      });
       return;
     }
 
@@ -31,15 +44,17 @@ export default function SignUpPage() {
     axios
       .post(`${URL_BASE}/sign-up`, newUser)
       .then((res) => {
-        if (res.data.message) {
-          alert(res.data.message);
-          setEnable(false);
-          return;
-        }
         navigate("/");
       })
       .catch((err) => {
-        alert(err.response.data.message);
+        Swal.fire({
+          width: "300px",
+          title: "Error",
+          text: err.response.data.message,
+          icon: "error",
+          button: "OK",
+          closeOnEsc: true,
+        });
         setEnable(false);
       });
   }
@@ -58,6 +73,7 @@ export default function SignUpPage() {
             type="email"
             placeholder="e-mail"
             value={email}
+            ref={inputRef}
             onChange={(e) => setEmail(e.target.value)}
             disabled={enable}
           />
@@ -207,5 +223,6 @@ export const SignUpContainer = styled.div`
       }
     }
   }
+
 
 `;

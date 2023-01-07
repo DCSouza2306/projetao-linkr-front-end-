@@ -4,6 +4,7 @@ import { URL_BASE } from "../constants/url";
 import React, { useState } from "react";
 import { AuthContext } from "../context/auth-context";
 import LoadingMessage from "./LoadingMessage";
+import Swal from "sweetalert2";
 
 export default function Modal({ closeModal, idPost }) {
   const { userData, setRefreshTimeline, refreshTimeline } =
@@ -22,9 +23,14 @@ export default function Modal({ closeModal, idPost }) {
         setRefreshTimeline(!refreshTimeline);
       })
       .catch((e) => {
-        alert(e.response.data.message);
+        Swal.fire({
+          width: "300px",
+          title: "Atention",
+          text: e.response.data.message,
+          icon: "info",
+          button: "OK",
+          });
         closeModal(false);
-        console.log(e.response.data.message);
       });
   }
   return (
