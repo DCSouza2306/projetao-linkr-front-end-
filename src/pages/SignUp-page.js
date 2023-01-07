@@ -31,10 +31,10 @@ export default function SignUpPage() {
     axios
       .post(`${URL_BASE}/sign-up`, newUser)
       .then((res) => {
-        if(res.data.message){
-            alert(res.data.message)
-            setEnable(false);
-            return;
+        if (res.data.message) {
+          alert(res.data.message);
+          setEnable(false);
+          return;
         }
         navigate("/");
       })
@@ -108,15 +108,14 @@ export const SignUpContainer = styled.div`
     padding-top: 180px;
     display: flex;
     justify-content: center;
-
-    .content-left {
-      width: 442px;
-      h1 {
-        font-size: 106px;
-      }
-      h2 {
-        font-size: 43px;
-      }
+  }
+  .content-left {
+    width: 442px;
+    h1 {
+      font-size: 106px;
+    }
+    h2 {
+      font-size: 43px;
     }
   }
 
@@ -134,30 +133,29 @@ export const SignUpContainer = styled.div`
       flex-direction: column;
       align-items: center;
       justify-content: center;
+    }
+    input {
+      min-width: 429px;
+      min-height: 65px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 27px;
+      font-family: "Passion One", cursive;
+      color: #9f9f9f;
+    }
 
-      input {
-        width: 429px;
-        height: 65px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: none;
-        font-size: 27px;
-        font-family: "Passion One", cursive;
-        color: #9f9f9f;
-      }
-
-      .button-sign-up {
-        background-color: #1877f2;
-        color: #ffffff;
-        width: 429px;
-        height: 65px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: none;
-        font-size: 27px;
-        font-family: "Passion One", cursive;
-        text-decoration: none;
-      }
+    .button-sign-up {
+      background-color: #1877f2;
+      color: #ffffff;
+      min-width: 429px;
+      min-height: 65px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 27px;
+      font-family: "Passion One", cursive;
+      text-decoration: none;
     }
 
     button {
@@ -166,10 +164,48 @@ export const SignUpContainer = styled.div`
       color: #ffffff;
       text-decoration: underline;
       border: none;
+      cursor: pointer;
+    }
+  }
 
-      :hover {
-        cursor: pointer;
+  @media screen and (max-width: 935px) {
+    display: initial;
+    width: 100%;
+    height: 100%;
+
+    .left-box-sign-up {
+      width: 100%;
+      height: 175px;
+      padding-top: 10px;
+
+      .content-left {
+        max-width: 237px;
+        h1 {
+          font-size: 76px;
+          text-align: center;
+        }
+        h2 {
+          font-size: 23px;
+          text-align: center;
+          line-height: 30px;
+        }
+      }
+    }
+
+    .right-box-sign-up {
+      width: 100%;
+      height: calc(100vh - 175px);
+      justify-content: initial;
+
+      form{
+        margin-top: 50px;
+      }
+
+      input, .button-sign-up {
+        min-width: 330px;
+        min-height: 55px;
       }
     }
   }
+
 `;
