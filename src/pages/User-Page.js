@@ -96,7 +96,10 @@ const Container = styled.div`
   margin-bottom: 24px;
   background-color: #171717;
   color: #ffffff;
-
+  .post {
+    width: 611px;
+    height: 276px;
+  }
   .headerPost {
     display: flex;
   }
@@ -141,6 +144,8 @@ const Container = styled.div`
   .linkEmbed {
     display: flex;
     justify-content: center;
+    margin-left: 25px;
+    padding: 7px 10px;
   }
 
   iframe {
