@@ -9,6 +9,7 @@ import LoadingMessage from "../components/LoadingMessage";
 import NoPostsMessage from "../components/NoPostsMessage";
 import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
+import Swal from "sweetalert2";
 const customStyles = {
   content: {
     top: "50%",
@@ -43,9 +44,13 @@ export default function TimelinePage(params) {
 		})
 		.catch((err) => {
 		  console.log(err.data);
-		  alert(
-			"An error occured while trying to fetch the posts, please refresh the page"
-		  );
+		  Swal.fire({
+			width: "300px",
+			title: "Error",
+			text: "An error occured while trying to fetch the posts, please refresh the page",
+			icon: "error",
+			button: "OK",
+		  });
 		});
 	}, [refreshTimeline]);
   
