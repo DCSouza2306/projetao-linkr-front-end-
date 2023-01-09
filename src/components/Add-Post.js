@@ -48,7 +48,7 @@ export default function AddPost() {
 
 	return (
 		<NewPostWrapper>
-			<img src={userData.urlImage} alt="user image" />
+			<img src={userData?.urlImage} alt="user image" />
 
 			<div>
 				<h1>What are you going to share today?</h1>

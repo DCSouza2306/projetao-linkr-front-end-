@@ -1,115 +1,247 @@
-import styled from 'styled-components';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useState } from 'react';
+import styled from "styled-components";
+import {
+  AiOutlineHeart,
+  AiFillDelete,
+  AiFillEdit,
+  AiFillHeart,
+} from "react-icons/ai";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { URL_BASE } from "../constants/url";
+import { AuthContext } from "../context/auth-context";
 
+export default function GeneralPost({
+  id,
+  urlImage,
+  userId,
+  name,
+  content,
+  link,
+  setModalIsOpen,
+  setIdPost,
+}) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [openTextArea, setOpenTextArea] = useState(false);
+  const [contentChange, setContentChange] = useState(content);
+  const [enableInput, setEnableInput] = useState(false);
+  const [enableButtons, setEnableButtons] = useState(false)
+  const { userData, setRefreshTimeline, refreshTimeline } =
+    React.useContext(AuthContext);
+  const inputRef = useRef();
+  const config = {
+    headers: { Authorization: `Bearer ${userData?.token}` },
+  };
 
-export default async function GeneralPost({ id, urlImage, name, content, link }) {
-    const [isLiked, setIsLiked] = useState(false)
-
-    function likePost(){
-        if(isLiked === false){
-            //Envia para a tabela likes o id do usuario e o id do post
-        } else{
-            //Exclui da tabela likes 
-        }
-        setIsLiked(!isLiked)
+  useEffect(() => {
+    if (openTextArea) {
+      inputRef.current.focus();
     }
+    setContentChange(content);
+  }, [openTextArea]);
 
-    return (
-        <Container>
-            <div className="post" key={id}>
-                <div className="headerPost">
-                    <div className="leftSide">
-                        <img src={urlImage} alt="profile picture" />
-                        {isLiked ? <AiFillHeart className="iconFillHeart" onClick={() => likePost()}/> : <AiOutlineHeart className="iconHeart" onClick={() => likePost()}/>}
-                    </div>
-                    <div className="rightSide">
-                        <p className="name">{name}</p>
-                        <p className="a">{content}</p>
-                    </div>
-                </div>
-                <div className="linkEmbed">
-                    <iframe src={link} />
-                </div>
+  function likePost() {
+    if (isLiked === false) {
+      //Envia para a tabela likes o id do usuario e o id do post
+    } else {
+      //Exclui da tabela likes
+    }
+    setIsLiked(!isLiked);
+  }
+
+  function openModal() {
+    setModalIsOpen(true);
+    setIdPost(id);
+  }
+
+
+  function changeContent(e) {
+    e.preventDefault();
+    setEnableInput(true)
+    setOpenTextArea(true);
+    const textChange = {
+      content: contentChange,
+    };
+    axios
+      .patch(`${URL_BASE}/posts/${id}`, textChange, config)
+      .then(() => {
+        setEnableInput(false)
+        setOpenTextArea(false)
+        setRefreshTimeline(!refreshTimeline);
+      })
+      .catch((e) => {
+        setEnableInput(false)
+        alert(e.response.data.message);
+      });
+  }
+
+  document.onkeydown = (e) => {
+    if (e.key === "Escape") {
+      setOpenTextArea(false);
+    }
+    if (e.key === "Enter" && openTextArea) {
+      changeContent();
+    }
+  };
+  const elemento = document.querySelector(".post")
+
+  function passouMouse(){
+    setEnableButtons(true)
+  }
+
+  function tirouMouse(){
+    setEnableButtons(false)
+  }
+
+  return (
+    <Container showButtons={userId == userData?.userId} enableButtons={enableButtons}>
+      <div className="post" key={id} onMouseEnter={passouMouse} onMouseLeave={tirouMouse} >
+        <div className="headerPost">
+          <div className="leftSide">
+            <img src={urlImage} alt="profile picture" />
+            {isLiked ? (
+              <AiFillHeart
+                className="iconFillHeart"
+                onClick={() => likePost()}
+              />
+            ) : (
+              <AiOutlineHeart
+                className="iconHeart"
+                onClick={() => likePost()}
+              />
+            )}
+          </div>
+          <div className="rightSide">
+            <div className="name-buttons">
+              <p className="name">{name}</p>
+              <div className="buttons-edit-delete">
+                <AiFillEdit
+                  className="icon-button"
+                  onClick={() => setOpenTextArea(!openTextArea)}
+                />
+                <AiFillDelete
+                  className="icon-button"
+                  onClick={() => openModal()}
+                />
+              </div>
             </div>
-        </Container>
-    );
+            {openTextArea && (
+              <form onSubmit={changeContent}>
+                <input
+                  disabled={enableInput}
+                  className="input-change-text"
+                  value={contentChange}
+                  ref={inputRef}
+                  onChange={(e) => setContentChange(e.target.value)}
+                />
+              </form>
+            )}
+            {!openTextArea && <p className="a">{content}</p>}
+          </div>
+        </div>
+        <div className="linkEmbed">
+          <iframe src={link} />
+        </div>
+      </div>
+    </Container>
+  );
 }
 
 const Container = styled.div`
-	border-radius: 16px;
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 24px;
-	background-color: #171717;
-	color: #ffffff;
-	width: 611px;
-	font-family: 'Lato', sans-serif;
-    padding: 16px 24px 16px 0;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+  background-color: #171717;
+  color: #ffffff;
+  width: 611px;
+  font-family: "Lato", sans-serif;
+  padding: 16px 24px 16px 0;
 
-	.headerPost {
-		display: flex;
-	}
+  .headerPost {
+    display: flex;
+  }
 
-	img {
-		width: 50px;
-		height: 50px;
-		border-radius: 100%;
-		position: absolute;
-		top: 0;
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    position: absolute;
+    top: 0px;
+  }
 
-	}
+  .input-change-text {
+    width: 503px;
+    height: 44px;
+    font-size: 16px;
+    font-family: "Lato", sans-serif;
+    border-radius: 10px;
+    padding: 0;
+  }
 
-	.iconHeart {
-		width: 30px;
-		height: 30px;
-		color: #ffffff;
-		margin-top: 8px;
-		cursor: pointer;
-		position: absolute;
-		top: 56px;  
-	}
+  .iconHeart {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    margin-top: 8px;
+    cursor: pointer;
+    position: absolute;
+    top: 56px;
+  }
 
-    .iconFillHeart{
-		width: 30px;
-		height: 30px;
-		color: #ffffff;
-		margin-top: 8px;
-		cursor: pointer;
-		position: absolute;
-		top: 56px;  
-        color: red;
+  .iconFillHeart {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    margin-top: 8px;
+    cursor: pointer;
+    position: absolute;
+    top: 56px;
+    color: red;
+  }
+
+  .leftSide {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .rightSide {
+    width: 85%;
+    overflow-wrap: break-word;
+
+    .name-buttons {
+      display: flex;
+      justify-content: space-between;
+      height: 25px;
+
+      .buttons-edit-delete {
+        margin-right: 20px;
+        width: 80px;
+        display: flex;
+        justify-content: space-around;
+        font-size: 20px;
+        display: ${props => props.showButtons && props.enableButtons ? "": "none"};
+
+        .icon-button {
+          cursor: pointer;
+        }
+      }
     }
 
-	.leftSide {
-        background-color: aliceblue;
-		width: 15%;
-        height: 10px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-	}
+  }
 
-	.rightSide {
-		width: 85%;
-		overflow-wrap: break-word;
+  .linkEmbed {
+    display: flex;
+    justify-content: end;
+  }
 
-		.a {
-			margin-top: 8px;
-		}
-	}
-
-	.linkEmbed {
-		display: flex;
-		justify-content: end;
-	}
-
-	iframe {
-		width: 85%;
-		height: 80%;
-		margin-top: 8px;
-		margin-bottom: 16px;
-	}
+  iframe {
+    width: 85%;
+    height: 80%;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
 `;

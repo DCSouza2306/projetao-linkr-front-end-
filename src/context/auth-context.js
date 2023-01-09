@@ -8,8 +8,11 @@ export function AuthProvider(props) {
 	const [userData, setUserData] = useState({
 		token: object?.token,
 		urlImage: object?.urlImage,
+		userId: object?.userId
 	});
 	const [refreshTimeline, setRefreshTimeline] = useState(true);
+
+	console.log(userData)
 
 	return (
 		<AuthContext.Provider
