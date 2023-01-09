@@ -91,9 +91,11 @@ export default function GeneralPost({
   function tirouMouse(){
     setEnableButtons(false)
   }
+  console.log(userId)
+  
 
   return (
-    <Container showButtons={userId == userData?.userId} enableButtons={enableButtons}>
+    <Container showButtons={userId == userData.userId} enableButtons={enableButtons}>
       <div className="post" key={id} onMouseEnter={passouMouse} onMouseLeave={tirouMouse} >
         <div className="headerPost">
           <div className="leftSide">

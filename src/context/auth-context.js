@@ -12,8 +12,6 @@ export function AuthProvider(props) {
 	});
 	const [refreshTimeline, setRefreshTimeline] = useState(true);
 
-	console.log(userData)
-
 	return (
 		<AuthContext.Provider
 			value={{
