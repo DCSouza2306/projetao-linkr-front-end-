@@ -1,10 +1,19 @@
 import styled from 'styled-components';
-import { Ring } from 'react-awesome-spinners';
+import { TailSpin } from 'react-loader-spinner';
 
-export default function LoadingMessage({zIndex}) {
+export default function LoadingMessage() {
 	return (
-		<LoadingMessageWrapper zIndex={zIndex}>
-			<Ring color={'#ffffff'} />
+		<LoadingMessageWrapper>
+			<TailSpin
+				height="80"
+				width="80"
+				color="#ffffff"
+				ariaLabel="tail-spin-loading"
+				radius="1"
+				wrapperStyle={{}}
+				wrapperClass=""
+				visible={true}
+			/>
 			<h1>Loading</h1>
 		</LoadingMessageWrapper>
 	);
@@ -21,6 +30,6 @@ const LoadingMessageWrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	margin-top: 25px;
-	z-index: ${props => props.zIndex == "10" ? "10" : "none"};
-	position: ${props => props.zIndex == "10"? "fixed": "static"}
+	z-index: ${(props) => (props.zIndex == '10' ? '10' : 'none')};
+	position: ${(props) => (props.zIndex == '10' ? 'fixed' : 'static')};
 `;
