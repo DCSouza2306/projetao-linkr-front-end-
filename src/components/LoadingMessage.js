@@ -1,10 +1,19 @@
 import styled from 'styled-components';
-import { Ring } from 'react-awesome-spinners';
+import { TailSpin } from 'react-loader-spinner';
 
 export default function LoadingMessage() {
 	return (
 		<LoadingMessageWrapper>
-			<Ring color={'#ffffff'} />
+			<TailSpin
+				height="80"
+				width="80"
+				color="#ffffff"
+				ariaLabel="tail-spin-loading"
+				radius="1"
+				wrapperStyle={{}}
+				wrapperClass=""
+				visible={true}
+			/>
 			<h1>Loading</h1>
 		</LoadingMessageWrapper>
 	);
