@@ -79,7 +79,7 @@ export default function TimelinePage(params) {
 			posts.map((p) =>  
 			  <GeneralPost
 				id={p.id}
-				userId={p["user-id"]}
+				userId={p.userId}
 				urlImage={p.urlImage}
 				name={p.name}
 				content={p.content}
