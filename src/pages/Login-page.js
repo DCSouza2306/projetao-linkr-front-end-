@@ -1,5 +1,5 @@
 import { SignUpContainer } from "./SignUp-page";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL_BASE } from "../constants/url";
@@ -9,39 +9,70 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [enable, setEnable] = useState(false);
-  const {setUserData} = React.useContext(AuthContext)
+  const { setUserData } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const token = JSON.parse(localStorage.getItem("token"));
+  const inputRef = useRef();
+  const Swal = require("sweetalert2");
 
-  if(token){
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  if (token) {
     setUserData(token);
-    navigate("/hashtag/react")
+    navigate("/timeline");
   }
 
-  function login(e){
+  function login(e) {
     e.preventDefault();
 
     if (email === "" || password === "") {
-      alert("Todos os campos devem ser preenchidos");
+      Swal.fire({
+        width: "300px",
+        title: "Atention",
+        text: "All fields must be filled in",
+        icon: "info",
+        button: "OK",
+        closeOnEsc: true,
+      });
       return;
     }
 
     setEnable(true);
 
-    const newLogin ={
+    const newLogin = {
       email: email,
-      password: password
-    }
+      password: password,
+    };
 
     axios
-    .post(`${URL_BASE}/`, newLogin)
-    .then((res) =>{
-      localStorage.setItem("token",JSON.stringify(res.data));
-      navigate("/hashtag/react")
-    }).catch((e) => {
-      alert(e.response.data.message);
-      setEnable(false)
-    })
+      .post(`${URL_BASE}/`, newLogin)
+      .then((res) => {
+        localStorage.setItem("token", JSON.stringify(res.data));
+        navigate("/timeline");
+      })
+      .catch((e) => {
+        if (e.response == undefined) {
+          Swal.fire({
+            width: "300px",
+            title: "Error",
+            text: "Connection Refused",
+            icon: "error",
+            button: "OK",
+            closeOnEsc: true,
+          });
+          setEnable(false);
+        }
+        Swal.fire({
+          width: "300px",
+          title: "Error",
+          text: e.response.data.message,
+          icon: "error",
+          button: "OK",
+        });
+        setEnable(false);
+      });
   }
 
   return (
@@ -54,11 +85,12 @@ export default function LoginPage() {
       </div>
 
       <div className="right-box-sign-up">
-        <form onSubmit={login} >
+        <form onSubmit={login}>
           <input
             type="email"
             placeholder="e-mail"
             value={email}
+            ref={inputRef}
             onChange={(e) => setEmail(e.target.value)}
             disabled={enable}
           />
