@@ -4,6 +4,7 @@ import {
 	AiFillDelete,
 	AiFillEdit,
 	AiFillHeart,
+	AiOutlineComment,
 } from 'react-icons/ai';
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
@@ -102,6 +103,10 @@ export default function GeneralPost({
 		setEnableButtons(false);
 	}
 
+	function openComments() {
+		alert('clicou');
+	}
+
 	return (
 		<Container
 			showButtons={userId == userData?.userId}
@@ -131,6 +136,10 @@ export default function GeneralPost({
 								onClick={() => likePost()}
 							/>
 						)}
+						<AiOutlineComment
+							className="iconComment"
+							onClick={openComments}
+						/>
 					</div>
 					<div className="rightSide">
 						<div className="name-buttons">
@@ -217,7 +226,7 @@ const Container = styled.div`
 		margin-top: 8px;
 		cursor: pointer;
 		position: absolute;
-		top: 56px;
+		top: 72px;
 	}
 
 	.iconFillHeart {
@@ -227,8 +236,18 @@ const Container = styled.div`
 		margin-top: 8px;
 		cursor: pointer;
 		position: absolute;
-		top: 56px;
 		color: red;
+		top: 72px;
+	}
+
+	.iconComment {
+		width: 30px;
+		height: 30px;
+		color: #ffffff;
+		margin-top: 8px;
+		cursor: pointer;
+		position: absolute;
+		top: 114px;
 	}
 
 	.leftSide {
