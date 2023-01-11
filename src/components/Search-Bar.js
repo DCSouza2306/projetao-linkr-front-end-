@@ -33,7 +33,7 @@ export default function SearchBar({ setPosts }) {
   }, [inputSearch]);
 
   return (
-    <Container>
+    <ContainerSearch>
       <Search>
         <input
           id="input"
@@ -67,11 +67,11 @@ export default function SearchBar({ setPosts }) {
           </div>
         )}
       </ListPeople>
-    </Container>
+    </ContainerSearch>
   );
 }
 
-const Container = styled.div`
+const ContainerSearch = styled.div`
   width: 563px;
   height: 176px;
   display: flex;

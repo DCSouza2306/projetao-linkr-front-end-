@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { URL_BASE } from "../constants/url";
 import axios from "axios";
-import HeaderSearch from "../components/Header-Search";
+import Header from "../components/Header";
 
 import { AiOutlineHeart } from "react-icons/ai";
 
@@ -23,7 +23,7 @@ export default function UserPage() {
 
   return (
     <>
-      <HeaderSearch setPosts={setPosts} />
+      <Header />
 
       <Wrapper>
         {posts.length === 1 ? (
