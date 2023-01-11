@@ -4,6 +4,7 @@ import {
   AiFillDelete,
   AiFillEdit,
   AiFillHeart,
+  AiOutlineComment,
 } from "react-icons/ai";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -25,7 +26,7 @@ export default function GeneralPost({
   const [openTextArea, setOpenTextArea] = useState(false);
   const [contentChange, setContentChange] = useState(content);
   const [enableInput, setEnableInput] = useState(false);
-  const [enableButtons, setEnableButtons] = useState(false)
+  const [enableButtons, setEnableButtons] = useState(false);
   const { userData, setRefreshTimeline, refreshTimeline } =
     React.useContext(AuthContext);
   const inputRef = useRef();
@@ -54,10 +55,9 @@ export default function GeneralPost({
     setIdPost(id);
   }
 
-
   function changeContent(e) {
     e.preventDefault();
-    setEnableInput(true)
+    setEnableInput(true);
     setOpenTextArea(true);
     const textChange = {
       content: contentChange,
@@ -65,12 +65,12 @@ export default function GeneralPost({
     axios
       .patch(`${URL_BASE}/posts/${id}`, textChange, config)
       .then(() => {
-        setEnableInput(false)
-        setOpenTextArea(false)
+        setEnableInput(false);
+        setOpenTextArea(false);
         setRefreshTimeline(!refreshTimeline);
       })
       .catch((e) => {
-        setEnableInput(false)
+        setEnableInput(false);
         Swal.fire({
           width: "300px",
           title: "Error",
@@ -91,65 +91,83 @@ export default function GeneralPost({
     }
   };
 
-  function passouMouse(){
-    setEnableButtons(true)
+  function passouMouse() {
+    setEnableButtons(true);
   }
 
-  function tirouMouse(){
-    setEnableButtons(false)
+  function tirouMouse() {
+    setEnableButtons(false);
+  }
+
+  function openComments() {
+    alert("clicou");
   }
 
   return (
-    <Container showButtons={userId == userData?.userId} enableButtons={enableButtons}>
-      <div className="post" key={id} onMouseEnter={passouMouse} onMouseLeave={tirouMouse} >
-        <div className="headerPost">
-          <div className="leftSide">
-            <img src={urlImage} alt="profile picture" />
-            {isLiked ? (
-              <AiFillHeart
-                className="iconFillHeart"
-                onClick={() => likePost()}
-              />
-            ) : (
-              <AiOutlineHeart
-                className="iconHeart"
-                onClick={() => likePost()}
-              />
-            )}
-          </div>
-          <div className="rightSide">
-            <div className="name-buttons">
-              <p className="name">{name}</p>
-              <div className="buttons-edit-delete">
-                <AiFillEdit
-                  className="icon-button"
-                  onClick={() => setOpenTextArea(!openTextArea)}
+    <>
+      <Container
+        showButtons={userId == userData?.userId}
+        enableButtons={enableButtons}
+      >
+        <div
+          className="post"
+          key={id}
+          onMouseEnter={passouMouse}
+          onMouseLeave={tirouMouse}
+        >
+          <div className="headerPost">
+            <div className="leftSide">
+              <img src={urlImage} alt="profile picture" />
+              {isLiked ? (
+                <AiFillHeart
+                  className="iconFillHeart"
+                  onClick={() => likePost()}
                 />
-                <AiFillDelete
-                  className="icon-button"
-                  onClick={() => openModal()}
+              ) : (
+                <AiOutlineHeart
+                  className="iconHeart"
+                  onClick={() => likePost()}
                 />
-              </div>
+              )}
+              <AiOutlineComment
+                className="iconComment"
+                onClick={openComments}
+              />
             </div>
-            {openTextArea && (
-              <form onSubmit={changeContent}>
-                <input
-                  disabled={enableInput}
-                  className="input-change-text"
-                  value={contentChange}
-                  ref={inputRef}
-                  onChange={(e) => setContentChange(e.target.value)}
-                />
-              </form>
-            )}
-            {!openTextArea && <p className="a">{content}</p>}
+            <div className="rightSide">
+              <div className="name-buttons">
+                <p className="name">{name}</p>
+                <div className="buttons-edit-delete">
+                  <AiFillEdit
+                    className="icon-button"
+                    onClick={() => setOpenTextArea(!openTextArea)}
+                  />
+                  <AiFillDelete
+                    className="icon-button"
+                    onClick={() => openModal()}
+                  />
+                </div>
+              </div>
+              {openTextArea && (
+                <form onSubmit={changeContent}>
+                  <input
+                    disabled={enableInput}
+                    className="input-change-text"
+                    value={contentChange}
+                    ref={inputRef}
+                    onChange={(e) => setContentChange(e.target.value)}
+                  />
+                </form>
+              )}
+              {!openTextArea && <p className="a">{content}</p>}
+            </div>
+          </div>
+          <div className="linkEmbed">
+            <iframe src={link} />
           </div>
         </div>
-        <div className="linkEmbed">
-          <iframe src={link} />
-        </div>
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }
 
@@ -172,8 +190,6 @@ const Container = styled.div`
     width: 50px;
     height: 50px;
     border-radius: 100%;
-    position: absolute;
-    top: 0px;
   }
 
   .input-change-text {
@@ -192,7 +208,7 @@ const Container = styled.div`
     margin-top: 8px;
     cursor: pointer;
     position: absolute;
-    top: 56px;
+    top: 72px;
   }
 
   .iconFillHeart {
@@ -202,8 +218,18 @@ const Container = styled.div`
     margin-top: 8px;
     cursor: pointer;
     position: absolute;
-    top: 56px;
     color: red;
+    top: 72px;
+  }
+
+  .iconComment {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    margin-top: 8px;
+    cursor: pointer;
+    position: absolute;
+    top: 114px;
   }
 
   .leftSide {
@@ -230,14 +256,14 @@ const Container = styled.div`
         display: flex;
         justify-content: space-around;
         font-size: 20px;
-        display: ${props => props.showButtons && props.enableButtons ? "": "none"};
+        display: ${(props) =>
+          props.showButtons && props.enableButtons ? "" : "none"};
 
         .icon-button {
           cursor: pointer;
         }
       }
     }
-
   }
 
   .linkEmbed {
