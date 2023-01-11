@@ -1,3 +1,5 @@
+
+import UserPage from "./pages/User-Page";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import HashtagPage from './pages/Hashtag-page';
 import SignUpPage from './pages/SignUp-page';
@@ -18,6 +20,7 @@ function App() {
 				<Route path="/sign-up" element={<SignUpPage />} />
 				<Route path="/" element={<LoginPage />} />
 				<Route path="/timeline" element={<TimelinePage />} />
+        <Route path="/user/:id" element={<UserPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
