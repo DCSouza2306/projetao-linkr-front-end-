@@ -12,6 +12,7 @@ import { URL_BASE } from '../constants/url';
 import { AuthContext } from '../context/auth-context';
 import Swal from 'sweetalert2';
 import LinkPreview from './LinkPreview';
+import { request } from '../requests/requests.js';
 
 export default function GeneralPost({
 	id,
@@ -25,8 +26,9 @@ export default function GeneralPost({
 	metaTitle,
 	metaDesc,
 	metaImage,
+	like,
+	isLiked
 }) {
-	const [isLiked, setIsLiked] = useState(false);
 	const [openTextArea, setOpenTextArea] = useState(false);
 	const [contentChange, setContentChange] = useState(content);
 	const [enableInput, setEnableInput] = useState(false);
@@ -35,25 +37,30 @@ export default function GeneralPost({
 		React.useContext(AuthContext);
 	const inputRef = useRef();
 	const config = {
-		headers: { Authorization: `Bearer ${userData?.token}` },
-	};
+		headers: { Authorization: `Bearer ${userData.token}` },
+	  };
 
-	useEffect(() => {
-		if (openTextArea) {
-			inputRef.current.focus();
-		}
-		setContentChange(content);
-	}, [openTextArea]);
-
-	function likePost() {
+	function likePost({id}) {
+	
 		if (isLiked === false) {
-			//Envia para a tabela likes o id do usuario e o id do post
+		 axios.post(`${URL_BASE}/likes/${id}`,{}, config)
+			.catch((error) => (console.log(error)))
 		} else {
-			//Exclui da tabela likes
+		  axios.delete(`${URL_BASE}/likesdelete/${id}`,config)
+			.then((res) => (console.log(res)))
+			.catch((error) => (console.log(error)))
 		}
-		setIsLiked(!isLiked);
-	}
+	  }
 
+  useEffect(() => {
+    if (openTextArea) {
+      inputRef.current.focus();
+    }
+    setContentChange(content);
+
+  }, [openTextArea]);
+
+ 
 	function openModal() {
 		setModalIsOpen(true);
 		setIdPost(id);
@@ -128,18 +135,20 @@ export default function GeneralPost({
 						{isLiked ? (
 							<AiFillHeart
 								className="iconFillHeart"
-								onClick={() => likePost()}
+								onClick={() => likePost({id})}
 							/>
 						) : (
 							<AiOutlineHeart
 								className="iconHeart"
-								onClick={() => likePost()}
+								onClick={() => likePost({id})}
 							/>
 						)}
+						 <p className="totalLikes">{like} likes</p>
 						<AiOutlineComment
 							className="iconComment"
 							onClick={openComments}
 						/>
+						
 					</div>
 					<div className="rightSide">
 						<div className="name-buttons">
@@ -240,15 +249,21 @@ const Container = styled.div`
 		top: 72px;
 	}
 
-	.iconComment {
-		width: 30px;
-		height: 30px;
-		color: #ffffff;
-		margin-top: 8px;
-		cursor: pointer;
-		position: absolute;
-		top: 114px;
-	}
+  .iconComment {
+    width: 30px;
+    height: 30px;
+    color: #ffffff;
+    margin-top: 8px;
+    cursor: pointer;
+    position: absolute;
+    top: 140px;
+  }
+
+  .totalLikes{
+    position: absolute;
+    top: 114px;
+    font-size: 12px;
+  }
 
 	.leftSide {
 		width: 15%;
