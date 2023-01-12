@@ -11,6 +11,7 @@ import axios from "axios";
 import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
 import Swal from "sweetalert2";
+import Comments from "./Comments";
 
 export default function GeneralPost({
   id,
@@ -27,6 +28,7 @@ export default function GeneralPost({
   const [contentChange, setContentChange] = useState(content);
   const [enableInput, setEnableInput] = useState(false);
   const [enableButtons, setEnableButtons] = useState(false);
+  const [enableComments, setEnableComments] = useState(false);
   const { userData, setRefreshTimeline, refreshTimeline } =
     React.useContext(AuthContext);
   const inputRef = useRef();
@@ -35,11 +37,11 @@ export default function GeneralPost({
   };
 
   useEffect(() => {
-    if (openTextArea) {
+    if (openTextArea || enableComments) {
       inputRef.current.focus();
     }
     setContentChange(content);
-  }, [openTextArea]);
+  }, [openTextArea, enableComments]);
 
   function likePost() {
     if (isLiked === false) {
@@ -91,16 +93,16 @@ export default function GeneralPost({
     }
   };
 
-  function passouMouse() {
+  function mouseOn() {
     setEnableButtons(true);
   }
 
-  function tirouMouse() {
+  function mouseOver() {
     setEnableButtons(false);
   }
 
   function openComments() {
-    alert("clicou");
+    setEnableComments(!enableComments)
   }
 
   return (
@@ -112,8 +114,8 @@ export default function GeneralPost({
         <div
           className="post"
           key={id}
-          onMouseEnter={passouMouse}
-          onMouseLeave={tirouMouse}
+          onMouseEnter={mouseOn}
+          onMouseLeave={mouseOver}
         >
           <div className="headerPost">
             <div className="leftSide">
@@ -166,21 +168,36 @@ export default function GeneralPost({
             <iframe src={link} />
           </div>
         </div>
+        <Comments 
+        displayComments={enableComments} 
+        urlImage={userData.urlImage}
+        inputRef={inputRef}
+        postId={id}
+        openComments={openComments}
+        />
       </Container>
     </>
   );
 }
 
 const Container = styled.div`
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
-  background-color: #171717;
-  color: #ffffff;
-  width: 611px;
-  font-family: "Lato", sans-serif;
-  padding: 16px 24px 16px 0;
+  margin-bottom: 34px;
+  background-color: #1e1e1e;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  .post {
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    background-color: #171717;
+    color: #ffffff;
+    width: 611px;
+    font-family: "Lato", sans-serif;
+    padding: 16px 24px 0 0;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
 
   .headerPost {
     display: flex;
