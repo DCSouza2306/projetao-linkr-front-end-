@@ -105,18 +105,15 @@ const NewPostWrapper = styled.div`
 	justify-content: space-between;
 	font-family: 'Lato', sans-serif;
 	font-weight: 300;
-
 	img {
 		width: 50px;
 		height: 50px;
 		border-radius: 26.5px;
 	}
-
 	div {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-
 		h1 {
 		}
 	}
@@ -127,7 +124,6 @@ const PublishForm = styled.form`
 	flex-direction: column;
 	align-items: flex-end;
 	font-family: 'Lato', sans-serif;
-
 	input {
 		width: 503px;
 		background-color: #efefef;
@@ -137,14 +133,12 @@ const PublishForm = styled.form`
 		font-weight: 300;
 		font-size: 15px;
 	}
-
 	.urlInput {
 		height: 30px;
 	}
 	.textInput {
 		height: 66px;
 	}
-
 	button {
 		width: 112px;
 		height: 31px;

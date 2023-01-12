@@ -112,7 +112,7 @@ const [listIsLiked, setListIsLiked] = useState()
 							setModalIsOpen={setModalIsOpen}
 							setIdPost={setIdPost}
 							like={lika({likes, p})}
-							isLiked={isLiked({listIsLiked,p})}
+							isLiked={isLiked({listIsLiked,p, userId})}
 						
 						/>
           ))
