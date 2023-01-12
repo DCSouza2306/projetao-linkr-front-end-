@@ -39,11 +39,19 @@ export default function GeneralPost({
       inputRef.current.focus();
     }
     setContentChange(content);
+
+
+    axios.get(`http://localhost:4000/likes/${id}`)
+      .then((res) => (console.log(res.data)))
+      .catch((error) => (console.log(error)))
+
   }, [openTextArea]);
 
   function likePost() {
     if (isLiked === false) {
-      //Envia para a tabela likes o id do usuario e o id do post
+      axios.post(`http://localhost:4000/likes/48`, config)
+        .then((res) => (console.log(res)) )
+        .catch((error) => (console.log(error)))
     } else {
       //Exclui da tabela likes
     }
@@ -123,6 +131,7 @@ export default function GeneralPost({
                   className="iconFillHeart"
                   onClick={() => likePost()}
                 />
+
               ) : (
                 <AiOutlineHeart
                   className="iconHeart"
@@ -133,6 +142,7 @@ export default function GeneralPost({
                 className="iconComment"
                 onClick={openComments}
               />
+              <p className="totalLikes">{10} likes</p>
             </div>
             <div className="rightSide">
               <div className="name-buttons">
@@ -229,7 +239,13 @@ const Container = styled.div`
     margin-top: 8px;
     cursor: pointer;
     position: absolute;
+    top: 140px;
+  }
+
+  .totalLikes{
+    position: absolute;
     top: 114px;
+    font-size: 12px;
   }
 
   .leftSide {
@@ -257,7 +273,7 @@ const Container = styled.div`
         justify-content: space-around;
         font-size: 20px;
         display: ${(props) =>
-          props.showButtons && props.enableButtons ? "" : "none"};
+    props.showButtons && props.enableButtons ? "" : "none"};
 
         .icon-button {
           cursor: pointer;
