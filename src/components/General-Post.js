@@ -44,10 +44,12 @@ export default function GeneralPost({
 	
 		if (isLiked === false) {
 		 axios.post(`${URL_BASE}/likes/${id}`,{}, config)
+			.then(() => (setRefreshTimeline(!refreshTimeline)))
 			.catch((error) => (console.log(error)))
+			
 		} else {
 		  axios.delete(`${URL_BASE}/likesdelete/${id}`,config)
-			.then((res) => (console.log(res)))
+			.then(() => (setRefreshTimeline(!refreshTimeline)))
 			.catch((error) => (console.log(error)))
 		}
 	  }
