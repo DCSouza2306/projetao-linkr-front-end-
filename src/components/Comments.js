@@ -48,7 +48,6 @@ export default function Comments({
         <img src={urlImage} alt="profile picture" className="img-comments" />
         <form className="forms-comment" onSubmit={sendComment}>
           <input
-            ref={inputRef}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             className="input-comment"

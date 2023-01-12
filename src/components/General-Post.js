@@ -57,11 +57,11 @@ export default function GeneralPost({
   }
 
   useEffect(() => {
-    if (openTextArea || enableComments) {
+    if (openTextArea) {
       inputRef.current.focus();
     }
     setContentChange(content);
-  }, [openTextArea, enableComments]);
+  }, [openTextArea]);
 
   function openModal() {
     setModalIsOpen(true);
@@ -206,6 +206,7 @@ const Container = styled.div`
   background-color: #1e1e1e;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
+  position: relative;
 
   .post {
     border-radius: 16px;
