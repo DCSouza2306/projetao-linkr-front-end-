@@ -25,9 +25,9 @@ export default function GeneralPost({
 	metaTitle,
 	metaDesc,
 	metaImage,
-	like
+	like,
+	isLiked
 }) {
-	const [isLiked, setIsLiked] = useState(false);
 	const [openTextArea, setOpenTextArea] = useState(false);
 	const [contentChange, setContentChange] = useState(content);
 	const [enableInput, setEnableInput] = useState(false);
@@ -36,10 +36,27 @@ export default function GeneralPost({
 		React.useContext(AuthContext);
 	const inputRef = useRef();
 	const config = {
-		headers: {Authorization: `Bearer ${userData?.token}` },
+		headers: {Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjczNTIzOTI4LCJleHAiOjE2NzM2MTAzMjh9.vmhIkwkevj6B_96M0DRxTVVFrsbaNNVPUcXx1hwX-GQ` },
 	};
 
-	console.log(like)
+	
+
+	console.log(config)
+
+	function likePost({id}) {
+		if (isLiked === false) {
+			console.log(config, "Aaaaa")
+		 axios.post(`${URL_BASE}/likes/${id}`, config)
+			.catch((error) => (console.log(error)))
+	
+		} else {
+		  axios.post(`${URL_BASE}/likesdelete/${id}`,config)
+			.then((res) => (console.log(res)))
+			.catch((error) => (console.log(error)))
+		}
+
+	  }
+
   useEffect(() => {
     if (openTextArea) {
       inputRef.current.focus();
@@ -47,20 +64,10 @@ export default function GeneralPost({
     setContentChange(content);
 	
 
+
   }, [openTextArea]);
 
-  function likePost() {
-    if (isLiked === false) {
-		console.log("request")
-      axios.post(`http://localhost:4000/likes/${id}`, config)
-        .then((res) => (console.log(res)) )
-        .catch((error) => (console.log(error)))
-    } else {
-      //Exclui da tabela likes
-    }
-    setIsLiked(!isLiked);
-  }
-
+ 
 	function openModal() {
 		setModalIsOpen(true);
 		setIdPost(id);
@@ -135,12 +142,12 @@ export default function GeneralPost({
 						{isLiked ? (
 							<AiFillHeart
 								className="iconFillHeart"
-								onClick={() => likePost()}
+								onClick={() => likePost({id})}
 							/>
 						) : (
 							<AiOutlineHeart
 								className="iconHeart"
-								onClick={() => likePost()}
+								onClick={() => likePost({id})}
 							/>
 						)}
 						 <p className="totalLikes">{like} likes</p>

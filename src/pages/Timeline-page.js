@@ -10,7 +10,7 @@ import NoPostsMessage from '../components/NoPostsMessage';
 import { URL_BASE } from '../constants/url';
 import { AuthContext } from '../context/auth-context';
 import Swal from 'sweetalert2';
-import { lika, request } from '../requests/requests.js';
+import { isLiked, lika, request } from '../requests/requests.js';
 const customStyles = {
 	content: {
 		top: '50%',
@@ -26,11 +26,14 @@ export default function TimelinePage(params) {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [idPost, setIdPost] = useState('');
 	const [posts, setPosts] = useState([]);
-	const { refreshTimeline, setUserData } = React.useContext(AuthContext);
+	const { refreshTimeline, setUserData , userId} = React.useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(true);
 	const token = JSON.parse(localStorage.getItem('token'));
 	const [likes, setLikes] = useState()
-	console.log(likes)
+	const [listIsLiked, setListIsLiked] = useState()
+
+
+
 
 	function closeModal() {
 		setModalIsOpen(false);
@@ -57,7 +60,8 @@ export default function TimelinePage(params) {
 
 		const requestLikes = async () => {
 			const data = await request()
-			setLikes(data.likesPost)
+			setLikes(data?.likesPost)
+			setListIsLiked(data?.isLiked)
 		}
 
 		requestLikes()
@@ -100,6 +104,8 @@ export default function TimelinePage(params) {
 							setModalIsOpen={setModalIsOpen}
 							setIdPost={setIdPost}
 							like={lika({likes, p})}
+							isLiked={isLiked({listIsLiked,p})}
+						
 						/>
 					))
 				)}
