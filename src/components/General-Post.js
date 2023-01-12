@@ -12,6 +12,7 @@ import { URL_BASE } from '../constants/url';
 import { AuthContext } from '../context/auth-context';
 import Swal from 'sweetalert2';
 import LinkPreview from './LinkPreview';
+import { request } from '../requests/requests.js';
 
 export default function GeneralPost({
 	id,
@@ -36,25 +37,19 @@ export default function GeneralPost({
 		React.useContext(AuthContext);
 	const inputRef = useRef();
 	const config = {
-		headers: {Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjczNTIzOTI4LCJleHAiOjE2NzM2MTAzMjh9.vmhIkwkevj6B_96M0DRxTVVFrsbaNNVPUcXx1hwX-GQ` },
-	};
-
-	
-
-	console.log(config)
+		headers: { Authorization: `Bearer ${userData.token}` },
+	  };
 
 	function likePost({id}) {
-		if (isLiked === false) {
-			console.log(config, "Aaaaa")
-		 axios.post(`${URL_BASE}/likes/${id}`, config)
-			.catch((error) => (console.log(error)))
 	
+		if (isLiked === false) {
+		 axios.post(`${URL_BASE}/likes/${id}`,{}, config)
+			.catch((error) => (console.log(error)))
 		} else {
-		  axios.post(`${URL_BASE}/likesdelete/${id}`,config)
+		  axios.delete(`${URL_BASE}/likesdelete/${id}`,config)
 			.then((res) => (console.log(res)))
 			.catch((error) => (console.log(error)))
 		}
-
 	  }
 
   useEffect(() => {
@@ -62,8 +57,6 @@ export default function GeneralPost({
       inputRef.current.focus();
     }
     setContentChange(content);
-	
-
 
   }, [openTextArea]);
 

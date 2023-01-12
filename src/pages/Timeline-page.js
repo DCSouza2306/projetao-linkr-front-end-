@@ -26,14 +26,14 @@ export default function TimelinePage(params) {
 	const [modalIsOpen, setModalIsOpen] = useState(false);
 	const [idPost, setIdPost] = useState('');
 	const [posts, setPosts] = useState([]);
-	const { refreshTimeline, setUserData , userId} = React.useContext(AuthContext);
+	const { refreshTimeline, setUserData , userId, userData} = React.useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(true);
 	const token = JSON.parse(localStorage.getItem('token'));
 	const [likes, setLikes] = useState()
 	const [listIsLiked, setListIsLiked] = useState()
-
-
-
+	const config = {
+		headers: { Authorization: `Bearer ${userData.token}` },
+	  };
 
 	function closeModal() {
 		setModalIsOpen(false);
@@ -59,7 +59,7 @@ export default function TimelinePage(params) {
 			});
 
 		const requestLikes = async () => {
-			const data = await request()
+			const data = await request({config})
 			setLikes(data?.likesPost)
 			setListIsLiked(data?.isLiked)
 		}
