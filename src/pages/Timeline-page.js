@@ -25,9 +25,13 @@ export default function TimelinePage(params) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [idPost, setIdPost] = useState("");
   const [posts, setPosts] = useState([]);
-  const { refreshTimeline, setUserData } = React.useContext(AuthContext);
+  const [postsComments, setPostsComments] = useState([])
+  const { refreshTimeline, setUserData, userData } = React.useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("token"));
+  const config = {
+    headers: { Authorization: `Bearer ${userData?.token}` },
+  };
 
   function closeModal() {
     setModalIsOpen(false);
@@ -51,8 +55,16 @@ export default function TimelinePage(params) {
           button: "OK",
         });
       });
-  }, [refreshTimeline]);
 
+	  axios.get(`${URL_BASE}/posts/comments`,config)
+	  .then((res) => {
+		setPostsComments(res.data)
+	  })
+	  .catch((e)=> {
+		  console.log(e.response.data)
+	  })
+
+  }, [refreshTimeline]);
   return (
     <>
       <Header />
@@ -85,6 +97,7 @@ export default function TimelinePage(params) {
               name={p.name}
               content={p.content}
               link={p.link}
+			  postsComments={postsComments}
               setModalIsOpen={setModalIsOpen}
               setIdPost={setIdPost}
             />

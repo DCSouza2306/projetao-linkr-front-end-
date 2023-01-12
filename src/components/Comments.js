@@ -5,40 +5,45 @@ import { URL_BASE } from "../constants/url";
 import React, { useState, useEffect } from "react";
 import { AuthContext } from "../context/auth-context";
 
-
 export default function Comments({
   displayComments,
   urlImage,
   inputRef,
   postId,
-  openComments
+  openComments,
+  postsComments,
 }) {
   const [comment, setComment] = useState("");
-  const { userData } = React.useContext(AuthContext);
+  const { userData, refreshTimeline, setRefreshTimeline } =
+    React.useContext(AuthContext);
   const config = {
     headers: { Authorization: `Bearer ${userData?.token}` },
   };
 
-
   function sendComment(e) {
     e.preventDefault();
     const textComment = {
-      comment
+      comment,
     };
-    axios.post(`${URL_BASE}/posts/${postId}/comments`, textComment, config)
-    .then(() => {
-        alert("enviou");
-        openComments(false)
-        setComment("")
-
-    })
-    .catch((e) => {
-        alert(e.response.data.message)
-    });
-   
+    axios
+      .post(`${URL_BASE}/posts/${postId}/comments`, textComment, config)
+      .then(() => {
+        openComments(false);
+        setComment("");
+        setRefreshTimeline(!refreshTimeline);
+      })
+      .catch((e) => {
+        alert(e.response.data.message);
+      });
   }
   return (
     <ContainerComment displayComments={displayComments}>
+        <div className="comments">
+        {
+        postsComments?.map((post) => <p>testeeee</p>)}
+        </div>
+   
+
       <div className="write-comment">
         <img src={urlImage} alt="profile picture" className="img-comments" />
         <form className="forms-comment" onSubmit={sendComment}>
@@ -62,13 +67,19 @@ const ContainerComment = styled.div`
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   display: ${(props) => (props.displayComments ? "" : "none")};
-  position: relative;
+
+  .comments {
+    height: 80px;
+    width: 100%;
+    background-color: purple;
+  }
 
   .write-comment {
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-around;
+    position: relative;
 
     .send-icon {
       color: #ffffff;
@@ -98,7 +109,7 @@ const ContainerComment = styled.div`
       padding-left: 10px;
       padding-right: 40px;
 
-      ::placeholder{
+      ::placeholder {
         color: #575757;
       }
     }
