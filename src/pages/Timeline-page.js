@@ -1,24 +1,25 @@
-import axios from "axios";
-import Modal from "../components/Modal";
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import AddPost from "../components/Add-Post";
-import GeneralPost from "../components/General-Post";
-import Header from "../components/Header";
-import LoadingMessage from "../components/LoadingMessage";
-import NoPostsMessage from "../components/NoPostsMessage";
-import { URL_BASE } from "../constants/url";
-import { AuthContext } from "../context/auth-context";
-import Swal from "sweetalert2";
+import axios from 'axios';
+import Modal from '../components/Modal';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import AddPost from '../components/Add-Post';
+import GeneralPost from '../components/General-Post';
+import Header from '../components/Header';
+import LoadingMessage from '../components/LoadingMessage';
+import NoPostsMessage from '../components/NoPostsMessage';
+import { URL_BASE } from '../constants/url';
+import { AuthContext } from '../context/auth-context';
+import Swal from 'sweetalert2';
+import { isLiked, lika, request } from '../requests/requests.js';
 const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
+	content: {
+		top: '50%',
+		left: '50%',
+		right: 'auto',
+		bottom: 'auto',
+		marginRight: '-50%',
+		transform: 'translate(-50%, -50%)',
+	},
 };
 
 export default function TimelinePage(params) {
@@ -26,9 +27,11 @@ export default function TimelinePage(params) {
   const [idPost, setIdPost] = useState("");
   const [posts, setPosts] = useState([]);
   const [postsComments, setPostsComments] = useState([])
-  const { refreshTimeline, setUserData, userData } = React.useContext(AuthContext);
+  const { refreshTimeline, setUserData, userData, userId } = React.useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("token"));
+  const [likes, setLikes] = useState()
+const [listIsLiked, setListIsLiked] = useState()
   const config = {
     headers: { Authorization: `Bearer ${userData?.token}` },
   };
@@ -64,6 +67,13 @@ export default function TimelinePage(params) {
 		  console.log(e.response.data)
 	  })
 
+	  const requestLikes = async () => {
+		const data = await request({config})
+		setLikes(data?.likesPost)
+		setListIsLiked(data?.isLiked)
+	}
+
+	requestLikes()
   }, [refreshTimeline]);
   return (
     <>
@@ -90,17 +100,21 @@ export default function TimelinePage(params) {
         ) : (
           posts.map((p) => (
             <GeneralPost
-              key={p.id}
-              id={p.id}
-              userId={p.userId}
-              urlImage={p.urlImage}
-              name={p.name}
-              content={p.content}
-              link={p.link}
-			  postsComments={postsComments}
-              setModalIsOpen={setModalIsOpen}
-              setIdPost={setIdPost}
-            />
+							id={p.id}
+							userId={p.userId}
+							urlImage={p.urlImage}
+							name={p.name}
+							content={p.content}
+							link={p.link}
+							metaTitle={p.metaTitle}
+							metaDesc={p.metaDesc}
+							metaImage={p.metaImage}
+							setModalIsOpen={setModalIsOpen}
+							setIdPost={setIdPost}
+							like={lika({likes, p})}
+							isLiked={isLiked({listIsLiked,p})}
+						
+						/>
           ))
         )}
       </Wrapper>
@@ -109,11 +123,11 @@ export default function TimelinePage(params) {
 }
 
 const Wrapper = styled.div`
-  background-color: #333333;
-  padding-top: 100px;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+	background-color: #333333;
+	padding-top: 100px;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
 `;

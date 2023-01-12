@@ -12,6 +12,8 @@ import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
 import Swal from "sweetalert2";
 import Comments from "./Comments";
+import LinkPreview from "./LinkPreview";
+import { request } from "../requests/requests.js";
 
 export default function GeneralPost({
   id,
@@ -22,19 +24,39 @@ export default function GeneralPost({
   link,
   setModalIsOpen,
   setIdPost,
+  metaTitle,
+  metaDesc,
+  metaImage,
+  like,
+  isLiked,
 }) {
-  const [isLiked, setIsLiked] = useState(false);
   const [openTextArea, setOpenTextArea] = useState(false);
+  const [enableComments, setEnableComments] = useState(false);
   const [contentChange, setContentChange] = useState(content);
   const [enableInput, setEnableInput] = useState(false);
   const [enableButtons, setEnableButtons] = useState(false);
-  const [enableComments, setEnableComments] = useState(false);
   const { userData, setRefreshTimeline, refreshTimeline } =
     React.useContext(AuthContext);
   const inputRef = useRef();
   const config = {
-    headers: { Authorization: `Bearer ${userData?.token}` },
+    headers: { Authorization: `Bearer ${userData.token}` },
   };
+
+  function likePost({ id }) {
+    if (isLiked === false) {
+      axios
+        .post(`${URL_BASE}/likes/${id}`, {}, config)
+        .then(() => {
+          setRefreshTimeline(!setRefreshTimeline);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      axios
+        .delete(`${URL_BASE}/likesdelete/${id}`, config)
+        .then((res) => console.log(res))
+        .catch((error) => console.log(error));
+    }
+  }
 
   useEffect(() => {
     if (openTextArea || enableComments) {
@@ -42,15 +64,6 @@ export default function GeneralPost({
     }
     setContentChange(content);
   }, [openTextArea, enableComments]);
-
-  function likePost() {
-    if (isLiked === false) {
-      //Envia para a tabela likes o id do usuario e o id do post
-    } else {
-      //Exclui da tabela likes
-    }
-    setIsLiked(!isLiked);
-  }
 
   function openModal() {
     setModalIsOpen(true);
@@ -102,7 +115,7 @@ export default function GeneralPost({
   }
 
   function openComments() {
-    setEnableComments(!enableComments)
+    setEnableComments(!enableComments);
   }
 
   return (
@@ -119,18 +132,23 @@ export default function GeneralPost({
         >
           <div className="headerPost">
             <div className="leftSide">
-              <img src={urlImage} alt="profile picture" />
+              <img
+                className="profilePic"
+                src={urlImage}
+                alt="profile picture"
+              />
               {isLiked ? (
                 <AiFillHeart
                   className="iconFillHeart"
-                  onClick={() => likePost()}
+                  onClick={() => likePost({ id })}
                 />
               ) : (
                 <AiOutlineHeart
                   className="iconHeart"
-                  onClick={() => likePost()}
+                  onClick={() => likePost({ id })}
                 />
               )}
+              <p className="totalLikes">{like} likes</p>
               <AiOutlineComment
                 className="iconComment"
                 onClick={openComments}
@@ -165,15 +183,20 @@ export default function GeneralPost({
             </div>
           </div>
           <div className="linkEmbed">
-            <iframe src={link} />
+            <LinkPreview
+              metaTitle={metaTitle}
+              metaDesc={metaDesc}
+              metaImage={metaImage}
+              link={link}
+            />
           </div>
         </div>
-        <Comments 
-        displayComments={enableComments} 
-        urlImage={userData.urlImage}
-        inputRef={inputRef}
-        postId={id}
-        openComments={openComments}
+        <Comments
+          displayComments={enableComments}
+          urlImage={userData.urlImage}
+          inputRef={inputRef}
+          postId={id}
+          openComments={openComments}
         />
       </Container>
     </>
@@ -203,10 +226,12 @@ const Container = styled.div`
     display: flex;
   }
 
-  img {
+  .profilePic {
     width: 50px;
     height: 50px;
     border-radius: 100%;
+    position: absolute;
+    top: 0px;
   }
 
   .input-change-text {
@@ -246,7 +271,13 @@ const Container = styled.div`
     margin-top: 8px;
     cursor: pointer;
     position: absolute;
+    top: 140px;
+  }
+
+  .totalLikes {
+    position: absolute;
     top: 114px;
+    font-size: 12px;
   }
 
   .leftSide {
