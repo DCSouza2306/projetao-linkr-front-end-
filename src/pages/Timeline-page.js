@@ -26,7 +26,7 @@ export default function TimelinePage(params) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [idPost, setIdPost] = useState("");
   const [posts, setPosts] = useState([]);
-  const [commentsCount, setCommentsCount] = useState([])
+  const [commentsCount, setCommentsCount] = useState([]);
   const [postsComments, setPostsComments] = useState([]);
   const { refreshTimeline, setUserData, userData } =
     React.useContext(AuthContext);
@@ -71,13 +71,14 @@ export default function TimelinePage(params) {
         console.log(e.response.data);
       });
 
-    axios.get(`${URL_BASE}/comments`)
-	.then((res) => {
-		setCommentsCount(res.data)
-	})
-	.catch((e) => {
+    axios
+      .get(`${URL_BASE}/comments`)
+      .then((res) => {
+        setCommentsCount(res.data);
+      })
+      .catch((e) => {
         console.log(e.response.data);
-      });;
+      });
 
     const requestLikes = async () => {
       const data = await request({ config });
@@ -123,7 +124,7 @@ export default function TimelinePage(params) {
               metaImage={p.metaImage}
               postsComments={postsComments}
               setModalIsOpen={setModalIsOpen}
-			  commentsCount={commentsCount}
+              commentsCount={commentsCount}
               setIdPost={setIdPost}
               like={lika({ likes, p })}
               isLiked={isLiked({ listIsLiked, p, userId })}

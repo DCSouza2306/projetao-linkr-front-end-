@@ -16,7 +16,7 @@ export default function LinkPreview(props) {
 
 const PreviewLink = styled.a`
 	width: 503px;
-	height: 155px;
+	min-height: 155px;
 	margin-top: 8px;
 	margin-bottom: 16px;
 	font-family: 'Lato';

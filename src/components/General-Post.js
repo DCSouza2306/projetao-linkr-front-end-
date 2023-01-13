@@ -106,6 +106,7 @@ export default function GeneralPost({
     }
   };
 
+
   function mouseOn() {
     setEnableButtons(true);
   }
