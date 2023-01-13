@@ -11,25 +11,29 @@ import axios from 'axios';
 import { URL_BASE } from '../constants/url';
 import { AuthContext } from '../context/auth-context';
 import Swal from 'sweetalert2';
+import Comments from './Comments';
 import LinkPreview from './LinkPreview';
 import { request } from '../requests/requests.js';
 
 export default function GeneralPost({
-	id,
-	urlImage,
-	userId,
-	name,
-	content,
-	link,
-	setModalIsOpen,
-	setIdPost,
-	metaTitle,
-	metaDesc,
-	metaImage,
-	like,
-	isLiked
+  id,
+  urlImage,
+  userId,
+  name,
+  content,
+  link,
+  setModalIsOpen,
+  setIdPost,
+  metaTitle,
+  metaDesc,
+  metaImage,
+  like,
+  isLiked,
+  postsComments,
+  commentsCount,
 }) {
 	const [openTextArea, setOpenTextArea] = useState(false);
+  const [enableComments, setEnableComments] = useState(false);
 	const [contentChange, setContentChange] = useState(content);
 	const [enableInput, setEnableInput] = useState(false);
 	const [enableButtons, setEnableButtons] = useState(false);
@@ -103,18 +107,20 @@ export default function GeneralPost({
 			changeContent();
 		}
 	};
+  function mouseOn() {
+    setEnableButtons(true);
+  }
 
-	function passouMouse() {
-		setEnableButtons(true);
-	}
+  function mouseOver() {
+    setEnableButtons(false);
+  }
 
-	function tirouMouse() {
-		setEnableButtons(false);
-	}
+  function openComments() {
+    setEnableComments(!enableComments);
+  }
 
-	function openComments() {
-		alert('clicou');
-	}
+  const comments = postsComments?.filter((p) => p["post-id"] == id);
+  const count = commentsCount?.filter((p) => p["post-id"] == id);
 
 	return (
 		<Container
@@ -124,8 +130,8 @@ export default function GeneralPost({
 			<div
 				className="post"
 				key={id}
-				onMouseEnter={passouMouse}
-				onMouseLeave={tirouMouse}
+				onMouseEnter={mouseOn}
+				onMouseLeave={mouseOver}
 			>
 				<div className="headerPost">
 					<div className="leftSide">
@@ -150,6 +156,9 @@ export default function GeneralPost({
 							className="iconComment"
 							onClick={openComments}
 						/>
+            <p className="total-comments">
+              {/*   {count.length == 0 ? "0" : count[0]?.commentsCount}  */}comments
+            </p>
 						
 					</div>
 					<div className="rightSide">
@@ -193,21 +202,37 @@ export default function GeneralPost({
 					/>
 				</div>
 			</div>
+      <Comments
+          key={id}
+          displayComments={enableComments}
+          urlImage={userData.urlImage}
+          inputRef={inputRef}
+          postId={id}
+          comments={comments}
+        />
 		</Container>
 	);
 }
 
 const Container = styled.div`
-	border-radius: 16px;
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 24px;
-	background-color: #171717;
-	color: #ffffff;
-	width: 611px;
-	font-family: 'Lato', sans-serif;
-	padding: 16px 24px 16px 0;
-	position: relative;
+	margin-bottom: 34px;
+  background-color: #1e1e1e;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  position: relative;
+
+  .post {
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    background-color: #171717;
+    color: #ffffff;
+    width: 611px;
+    font-family: "Lato", sans-serif;
+    padding: 16px 24px 0 0;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
 
 	.headerPost {
 		display: flex;

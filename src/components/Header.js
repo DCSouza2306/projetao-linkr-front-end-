@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/auth-context';
 import React from 'react';
 
@@ -30,7 +30,9 @@ export default function Header() {
 
 	return (
 		<Container showLoggoutBox={showLoggoutBox}>
-			<h1>linkr</h1>
+		<Link to="/">
+			<div className='tittle-linkr'>linkr</div>
+		</Link>
 			<div>
 				<IoIosArrowUp
 					display={showLoggoutBox ? '' : 'none'}
@@ -103,11 +105,12 @@ const Container = styled.header`
 		cursor: pointer;
 	}
 
-	h1 {
+	.tittle-linkr {
 		font-size: 49px;
 		font-weight: bold;
 		color: #ffffff;
 		margin-left: 32px;
+		text-decoration: none;
 	}
 
 	img {
