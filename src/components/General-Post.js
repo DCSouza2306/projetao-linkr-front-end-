@@ -6,7 +6,8 @@ import {
   AiFillHeart,
   AiOutlineComment,
 } from "react-icons/ai";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef} from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
@@ -39,6 +40,7 @@ export default function GeneralPost({
   const [enableButtons, setEnableButtons] = useState(false);
   const { userData, setRefreshTimeline, refreshTimeline } =
     React.useContext(AuthContext);
+  const navigate = useNavigate();
   const inputRef = useRef();
   const config = {
     headers: { Authorization: `Bearer ${userData.token}` },
@@ -106,7 +108,6 @@ export default function GeneralPost({
     }
   };
 
-
   function mouseOn() {
     setEnableButtons(true);
   }
@@ -119,6 +120,10 @@ export default function GeneralPost({
     setEnableComments(!enableComments);
   }
 
+  function navigateUserPage() {
+    navigate(`/user/${userId}`)
+  }
+
   const comments = postsComments?.filter((p) => p["post-id"] == id);
   const count = commentsCount?.filter((p) => p["post-id"] == id);
   return (
@@ -127,17 +132,14 @@ export default function GeneralPost({
         showButtons={userId == userData?.userId}
         enableButtons={enableButtons}
       >
-        <div
-          className="post"
-          onMouseEnter={mouseOn}
-          onMouseLeave={mouseOver}
-        >
+        <div className="post" onMouseEnter={mouseOn} onMouseLeave={mouseOver}>
           <div className="headerPost">
             <div className="leftSide">
               <img
                 className="profilePic"
                 src={urlImage}
                 alt="profile picture"
+                onClick={() => navigateUserPage()}
               />
               {isLiked ? (
                 <AiFillHeart
@@ -161,7 +163,7 @@ export default function GeneralPost({
             </div>
             <div className="rightSide">
               <div className="name-buttons">
-                <p className="name">{name}</p>
+                <p className="name" onClick={() => navigateUserPage()}>{name}</p>
                 <div className="buttons-edit-delete">
                   <AiFillEdit
                     className="icon-button"
@@ -239,6 +241,7 @@ const Container = styled.div`
     border-radius: 100%;
     position: absolute;
     top: 0px;
+    cursor: pointer;
   }
 
   .input-change-text {
@@ -304,6 +307,10 @@ const Container = styled.div`
   .rightSide {
     width: 85%;
     overflow-wrap: break-word;
+
+    .name{
+      cursor: pointer;
+    }
 
     .name-buttons {
       display: flex;

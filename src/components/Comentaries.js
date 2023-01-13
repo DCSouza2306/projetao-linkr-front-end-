@@ -1,23 +1,38 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Comentaries({
   comment,
   urlImage,
   name,
   userId,
-  idCommenter,
+  idPostAuthor,
+  idCommenter
 }) {
-  const postAuthor = userId == idCommenter;
+  const postAuthor = userId == idPostAuthor;
+  const navigate = useNavigate();
+
+  function navigateUserPage() {
+    navigate(`/user/${idCommenter}`);
+  }
   return (
     <ComentariesDiv>
       <div>
-        <img src={urlImage} alt="profile picture" className="img-comments" />
+        <img
+          src={urlImage}
+          alt="profile picture"
+          className="img-comments"
+          onClick={() => navigateUserPage()}
+        />
       </div>
       <div className="comentaries-right">
         <div className="name-author">
-          <p className="comentaries-name">{name}</p>
+          <p onClick={() => navigateUserPage()} className="comentaries-name">
+            {name}
+          </p>
           <div className="name-dot">
-            {postAuthor? <div className="dot"></div>: ""}
+            {postAuthor ? <div className="dot"></div> : ""}
             <p>{postAuthor ? "post's author" : ""}</p>
           </div>
         </div>
@@ -45,12 +60,14 @@ const ComentariesDiv = styled.div`
     width: 39px;
     height: 39px;
     border-radius: 100%;
+    cursor: pointer;
   }
 
   .comentaries-name {
     font-size: 14px;
     color: white;
     font-weight: 700;
+    cursor: pointer;
   }
 
   .comentaries-content {
@@ -73,8 +90,8 @@ const ComentariesDiv = styled.div`
     align-items: center;
     margin-bottom: 5px;
   }
-  
-  .name-dot{
+
+  .name-dot {
     display: flex;
     align-items: center;
     justify-content: space-between;

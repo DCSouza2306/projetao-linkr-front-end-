@@ -44,7 +44,8 @@ export default function Comments({
         comment={post.comment} 
         urlImage={post["url-image"]}
         name={post.name}
-        idCommenter={userId}
+        idPostAuthor={userId}
+        idCommenter={post["commenter-id"]}
         userId={userData.userId}
         />)}
 

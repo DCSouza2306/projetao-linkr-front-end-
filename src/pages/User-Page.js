@@ -97,38 +97,47 @@ export default function UserPage() {
             className="modal-content"
           />
         ) : null}
-       
+
         {isLoading && <LoadingMessage />}
-        {posts.length === 0 && isLoading === false ? (
-          <NoPostsMessage />
-        ) : (<>
-         <User>
-          <div className="profile">
-            <img src={posts[0]?.urlImage} />
-            <h1>{posts[0]?.name} posts</h1>
-          </div>
-        </User>
-          {posts.map((p, i) => (
-            <GeneralPost
-              key={i}
-              id={p.id}
-              userId={p.userId}
-              urlImage={p.urlImage}
-              name={p.name}
-              content={p.content}
-              link={p.link}
-              metaTitle={p.metaTitle}
-              metaDesc={p.metaDesc}
-              metaImage={p.metaImage}
-              postsComments={postsComments}
-              setModalIsOpen={setModalIsOpen}
-              commentsCount={commentsCount}
-              setIdPost={setIdPost}
-              like={lika({ likes, p })}
-              isLiked={isLiked({ listIsLiked, p, userId })}
-            />
-          ))}
-        </>
+        {posts[0]?.link === undefined && isLoading === false ? (
+          <>
+            <User>
+              <div className="profile">
+                <img src={posts[0]["url-image"]} />
+                <h1>{posts[0].name} posts</h1>
+              </div>
+            </User>
+            <NoPostsMessage />
+          </>
+        ) : (
+          <>
+            <User>
+              <div className="profile">
+                <img src={posts[0]?.urlImage} />
+                <h1>{posts[0]?.name} posts</h1>
+              </div>
+            </User>
+            {posts.map((p, i) => (
+              <GeneralPost
+                key={i}
+                id={p.id}
+                userId={p.userId}
+                urlImage={p.urlImage}
+                name={p.name}
+                content={p.content}
+                link={p.link}
+                metaTitle={p.metaTitle}
+                metaDesc={p.metaDesc}
+                metaImage={p.metaImage}
+                postsComments={postsComments}
+                setModalIsOpen={setModalIsOpen}
+                commentsCount={commentsCount}
+                setIdPost={setIdPost}
+                like={lika({ likes, p })}
+                isLiked={isLiked({ listIsLiked, p, userId })}
+              />
+            ))}
+          </>
         )}
       </Wrapper>
     </>
