@@ -4,14 +4,13 @@ import axios from "axios";
 import { URL_BASE } from "../constants/url";
 import React, { useState, useEffect } from "react";
 import { AuthContext } from "../context/auth-context";
+import Comentaries from "./Comentaries";
 
 export default function Comments({
   displayComments,
   urlImage,
-  inputRef,
   postId,
-  openComments,
-  postsComments,
+  comments,
 }) {
   const [comment, setComment] = useState("");
   const { userData, refreshTimeline, setRefreshTimeline } =
@@ -19,6 +18,7 @@ export default function Comments({
   const config = {
     headers: { Authorization: `Bearer ${userData?.token}` },
   };
+
 
   function sendComment(e) {
     e.preventDefault();
@@ -28,7 +28,6 @@ export default function Comments({
     axios
       .post(`${URL_BASE}/posts/${postId}/comments`, textComment, config)
       .then(() => {
-        openComments(false);
         setComment("");
         setRefreshTimeline(!refreshTimeline);
       })
@@ -38,10 +37,14 @@ export default function Comments({
   }
   return (
     <ContainerComment displayComments={displayComments}>
-        <div className="comments">
-        {
-        postsComments?.map((post) => <p>testeeee</p>)}
-        </div>
+        {comments?.map((post, id) => 
+        <Comentaries 
+        key={id}
+        comment={post.comment} 
+        urlImage={post["url-image"]}
+        name={post.name}
+        />)}
+
    
 
       <div className="write-comment">
@@ -67,11 +70,6 @@ const ContainerComment = styled.div`
   border-bottom-right-radius: 16px;
   display: ${(props) => (props.displayComments ? "" : "none")};
 
-  .comments {
-    height: 80px;
-    width: 100%;
-    background-color: purple;
-  }
 
   .write-comment {
     height: 80px;
@@ -92,6 +90,7 @@ const ContainerComment = styled.div`
     .img-comments {
       width: 39px;
       height: 39px;
+      border-radius: 100%;
     }
 
     .input-comment {

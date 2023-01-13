@@ -29,6 +29,8 @@ export default function GeneralPost({
   metaImage,
   like,
   isLiked,
+  postsComments,
+  commentsCount,
 }) {
   const [openTextArea, setOpenTextArea] = useState(false);
   const [enableComments, setEnableComments] = useState(false);
@@ -116,6 +118,9 @@ export default function GeneralPost({
     setEnableComments(!enableComments);
   }
 
+  const comments = postsComments?.filter((p) => p["post-id"] == id);
+  const count = commentsCount?.filter((p) => p["post-id"] == id);
+  console.log(count)
   return (
     <>
       <Container
@@ -151,6 +156,9 @@ export default function GeneralPost({
                 className="iconComment"
                 onClick={openComments}
               />
+              <p className="total-comments">
+                {count.length == 0 ? "0" : count[0]?.commentsCount} comments
+              </p>
             </div>
             <div className="rightSide">
               <div className="name-buttons">
@@ -190,11 +198,12 @@ export default function GeneralPost({
           </div>
         </div>
         <Comments
+          key={id}
           displayComments={enableComments}
           urlImage={userData.urlImage}
           inputRef={inputRef}
           postId={id}
-          openComments={openComments}
+          comments={comments}
         />
       </Container>
     </>
@@ -276,6 +285,11 @@ const Container = styled.div`
   .totalLikes {
     position: absolute;
     top: 114px;
+    font-size: 12px;
+  }
+  .total-comments {
+    position: absolute;
+    top: 180px;
     font-size: 12px;
   }
 
