@@ -99,9 +99,10 @@ export default function UserPage() {
         ) : null}
 
         {isLoading && <LoadingMessage />}
+        
         {posts[0]?.link === undefined && isLoading === false ? (
           <>
-            <User>
+            <User showText={isLoading}>
               <div className="profile">
                 <img src={posts[0]["url-image"]} />
                 <h1>{posts[0].name} posts</h1>
@@ -166,11 +167,13 @@ const User = styled.div`
     font-weight: 700;
     font-size: 43px;
     line-height: 64px;
+    display:${props => props.showText ? "none": ""};
   }
 
   img {
     width: 50px;
     height: 50px;
     border-radius: 26px;
+    display:${props => props.showText ? "none": ""};
   }
 `;
