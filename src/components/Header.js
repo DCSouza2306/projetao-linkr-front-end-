@@ -33,7 +33,7 @@ export default function Header() {
   return (
     <Container showLoggoutBox={showLoggoutBox}>
       <Link to="/">
-        <a>linkr</a>
+        <div>linkr</div>
       </Link>
       <SearchBar />
       <div>

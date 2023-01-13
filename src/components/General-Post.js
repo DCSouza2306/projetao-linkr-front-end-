@@ -121,7 +121,6 @@ export default function GeneralPost({
 
   const comments = postsComments?.filter((p) => p["post-id"] == id);
   const count = commentsCount?.filter((p) => p["post-id"] == id);
-  console.log(count)
   return (
     <>
       <Container
@@ -130,7 +129,6 @@ export default function GeneralPost({
       >
         <div
           className="post"
-          key={id}
           onMouseEnter={mouseOn}
           onMouseLeave={mouseOver}
         >
