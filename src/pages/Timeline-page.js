@@ -111,8 +111,9 @@ export default function TimelinePage(params) {
         {posts.length === 0 && isLoading === false ? (
           <NoPostsMessage />
         ) : (
-          posts.map((p) => (
+          posts.map((p, i) => (
             <GeneralPost
+              key={i}
               id={p.id}
               userId={p.userId}
               urlImage={p.urlImage}
