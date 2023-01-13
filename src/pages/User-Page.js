@@ -4,21 +4,81 @@ import { useParams } from "react-router-dom";
 import { URL_BASE } from "../constants/url";
 import axios from "axios";
 import Header from "../components/Header";
-
+import Swal from "sweetalert2";
+import { AuthContext } from "../context/auth-context";
+import { isLiked, lika, request } from "../requests/requests.js";
 import { AiOutlineHeart } from "react-icons/ai";
+import Modal from "../components/Modal";
+import GeneralPost from "../components/General-Post";
+import NoPostsMessage from "../components/NoPostsMessage";
+import LoadingMessage from "../components/LoadingMessage";
 
 export default function UserPage() {
   const { id } = useParams();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [idPost, setIdPost] = useState("");
   const [posts, setPosts] = useState([]);
+  const [commentsCount, setCommentsCount] = useState([]);
+  const [postsComments, setPostsComments] = useState([]);
+  const { refreshTimeline, setUserData, userData } =
+    React.useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const token = JSON.parse(localStorage.getItem("token"));
+  const [likes, setLikes] = useState();
+  const [listIsLiked, setListIsLiked] = useState();
+  const config = {
+    headers: { Authorization: `Bearer ${userData.token}` },
+  };
+  let userId = userData.userId;
+
+  function closeModal() {
+    setModalIsOpen(false);
+  }
 
   useEffect(() => {
-    const promise = axios
+    setUserData(token);
+    axios
       .get(`${URL_BASE}/user/${id}`)
       .then((res) => {
-        console.log(res.data);
         setPosts(res.data);
+        setIsLoading(false);
       })
-      .catch((res) => {});
+      .catch((err) => {
+        console.log(err.data);
+        Swal.fire({
+          width: "300px",
+          title: "Error",
+          text: "An error occured while trying to fetch the posts, please refresh the page",
+          icon: "error",
+          button: "OK",
+        });
+      });
+
+    axios
+      .get(`${URL_BASE}/posts/comments`, config)
+      .then((res) => {
+        setPostsComments(res.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+      });
+
+    axios
+      .get(`${URL_BASE}/comments`)
+      .then((res) => {
+        setCommentsCount(res.data);
+      })
+      .catch((e) => {
+        console.log(e.response.data);
+      });
+
+    const requestLikes = async () => {
+      const data = await request({ config });
+      setLikes(data?.likesPost);
+      setListIsLiked(data?.isLiked);
+    };
+
+    requestLikes();
   }, [id]);
 
   return (
@@ -26,33 +86,49 @@ export default function UserPage() {
       <Header />
 
       <Wrapper>
-        {posts.length === 1 ? (
-          <User>
-            <div className="profile">
-              <img src={posts[0].url_image} />
-              <h1>{posts[0].name} posts</h1>
-            </div>
-          </User>
-        ) : (
-          posts.map((p) => (
-            <Container>
-              <div className="post">
-                <div className="headerPost">
-                  <div className="leftSide">
-                    <img src={p.url_image} />
-                    <AiOutlineHeart className="iconHeart" />
-                  </div>
-                  <div className="rightSide">
-                    <p className="name">{p.name}</p>
-                    <p className="a">{p.content}</p>
-                  </div>
-                </div>
-                <div className="linkEmbed">
-                  <iframe src={p.link} />
-                </div>
-              </div>
-            </Container>
-          ))
+        {modalIsOpen ? (
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            closeModal={setModalIsOpen}
+            idPost={idPost}
+            contentLabel="Example Modal"
+            overlayClassName="modal-overlay"
+            className="modal-content"
+          />
+        ) : null}
+       
+        {isLoading && <LoadingMessage />}
+        {posts.length === 0 && isLoading === false ? (
+          <NoPostsMessage />
+        ) : (<>
+         <User>
+          <div className="profile">
+            <img src={posts[0]?.urlImage} />
+            <h1>{posts[0]?.name} posts</h1>
+          </div>
+        </User>
+          {posts.map((p, i) => (
+            <GeneralPost
+              key={i}
+              id={p.id}
+              userId={p.userId}
+              urlImage={p.urlImage}
+              name={p.name}
+              content={p.content}
+              link={p.link}
+              metaTitle={p.metaTitle}
+              metaDesc={p.metaDesc}
+              metaImage={p.metaImage}
+              postsComments={postsComments}
+              setModalIsOpen={setModalIsOpen}
+              commentsCount={commentsCount}
+              setIdPost={setIdPost}
+              like={lika({ likes, p })}
+              isLiked={isLiked({ listIsLiked, p, userId })}
+            />
+          ))}
+        </>
         )}
       </Wrapper>
     </>
@@ -87,71 +163,5 @@ const User = styled.div`
     width: 50px;
     height: 50px;
     border-radius: 26px;
-  }
-`;
-const Container = styled.div`
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
-  background-color: #171717;
-  color: #ffffff;
-  .post {
-    width: 611px;
-    height: 276px;
-  }
-  .headerPost {
-    display: flex;
-  }
-
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-    position: absolute;
-    top: 16px;
-  }
-
-  .iconHeart {
-    width: 30px;
-    height: 30px;
-    color: #ffffff;
-    margin-top: 8px;
-    cursor: pointer;
-    position: absolute;
-    top: 72px;
-  }
-  .leftSide {
-    width: 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .rightSide {
-    width: 85%;
-    margin-top: 16px;
-    margin-left: 8px;
-    overflow-wrap: break-word;
-
-    .a {
-      margin-top: 8px;
-    }
-  }
-
-  .linkEmbed {
-    display: flex;
-    justify-content: center;
-    margin-left: 25px;
-    padding: 7px 10px;
-  }
-
-  iframe {
-    width: 90%;
-    height: 80%;
-    margin-top: 8px;
-    margin-bottom: 16px;
   }
 `;

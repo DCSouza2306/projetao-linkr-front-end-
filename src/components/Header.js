@@ -31,7 +31,7 @@ export default function Header() {
   }
 
   return (
-    <Container showLoggoutBox={showLoggoutBox}>
+    <ContainerHeader showLoggoutBox={showLoggoutBox}>
       <Link to="/">
         <div>linkr</div>
       </Link>
@@ -56,11 +56,11 @@ export default function Header() {
           Logout
         </div>
       </div>
-    </Container>
+    </ContainerHeader>
   );
 }
 
-const Container = styled.header`
+const ContainerHeader = styled.header`
   width: 100%;
   height: 72px;
   display: flex;
@@ -68,9 +68,7 @@ const Container = styled.header`
   justify-content: space-between;
   background-color: #151515;
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 5;
+  z-index: 1;
 
   div {
     display: flex;

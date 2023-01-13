@@ -11,6 +11,7 @@ export default function SearchBar({ setPosts }) {
   const navigate = useNavigate();
 
   async function handleFilter(event) {
+
     setInputSearch(event.target.value);
 
     if (inputSearch.length > 1) {
@@ -73,10 +74,10 @@ export default function SearchBar({ setPosts }) {
 
 const ContainerSearch = styled.div`
   width: 563px;
-  height: 176px;
+  height: 131px;
   display: flex;
   flex-direction: column;
-  top: 60px;
+  top: 40px;
   #hidden {
     display: none;
   }
@@ -133,6 +134,7 @@ const ListPeople = styled.div`
     width: 39px;
     height: 39px;
     border-radius: 304px;
+    margin-left: 15px;
   }
 
   .profile {
