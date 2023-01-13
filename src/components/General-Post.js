@@ -200,9 +200,9 @@ export default function GeneralPost({
           key={id}
           displayComments={enableComments}
           urlImage={userData.urlImage}
-          inputRef={inputRef}
           postId={id}
           comments={comments}
+          userId={userId}
         />
       </Container>
     </>

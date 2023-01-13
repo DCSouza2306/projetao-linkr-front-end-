@@ -11,6 +11,7 @@ export default function Comments({
   urlImage,
   postId,
   comments,
+  userId
 }) {
   const [comment, setComment] = useState("");
   const { userData, refreshTimeline, setRefreshTimeline } =
@@ -43,6 +44,8 @@ export default function Comments({
         comment={post.comment} 
         urlImage={post["url-image"]}
         name={post.name}
+        idCommenter={userId}
+        userId={userData.userId}
         />)}
 
    
