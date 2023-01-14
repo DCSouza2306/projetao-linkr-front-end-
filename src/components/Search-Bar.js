@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { URL_BASE } from "../constants/url";
+import { URL_BASE } from "../../constants/url";
 import { useNavigate } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 export default function SearchBar({ setPosts }) {

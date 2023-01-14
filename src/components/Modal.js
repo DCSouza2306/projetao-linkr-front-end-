@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import axios from "axios";
-import { URL_BASE } from "../constants/url";
+import { URL_BASE } from "../../constants/url";
 import React, { useState } from "react";
-import { AuthContext } from "../context/auth-context";
+import { AuthContext } from "../../context/auth-context";
 import LoadingMessage from "./LoadingMessage";
 import Swal from "sweetalert2";
 

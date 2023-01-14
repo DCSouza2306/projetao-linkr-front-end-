@@ -8,10 +8,10 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../context/auth-context";
 import { isLiked, lika, request } from "../requests/requests.js";
 import { AiOutlineHeart } from "react-icons/ai";
-import Modal from "../components/Modal";
-import GeneralPost from "../components/General-Post";
+import Modal from "../components/Timeline-components/Modal";
+import GeneralPost from "../components/Timeline-components/General-Post";
 import NoPostsMessage from "../components/NoPostsMessage";
-import LoadingMessage from "../components/LoadingMessage";
+import LoadingMessage from "../components/Timeline-components/LoadingMessage";
 
 export default function UserPage() {
   const { id } = useParams();

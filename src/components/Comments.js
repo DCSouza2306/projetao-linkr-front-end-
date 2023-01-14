@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { FiSend } from "react-icons/fi";
 import axios from "axios";
-import { URL_BASE } from "../constants/url";
+import { URL_BASE } from "../../constants/url";
 import React, { useState, useEffect } from "react";
-import { AuthContext } from "../context/auth-context";
+import { AuthContext } from "../../context/auth-context";
 import Comentaries from "./Comentaries";
 
 export default function Comments({

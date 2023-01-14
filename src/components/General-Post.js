@@ -9,12 +9,12 @@ import {
 import React, { useState, useEffect, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { URL_BASE } from "../constants/url";
-import { AuthContext } from "../context/auth-context";
+import { URL_BASE } from "../../constants/url";
+import { AuthContext } from "../../context/auth-context";
 import Swal from "sweetalert2";
-import Comments from "./Comments";
-import LinkPreview from "./LinkPreview";
-import { request } from "../requests/requests.js";
+import Comments from "../Posts-components/Comments";
+import LinkPreview from "../Posts-components/LinkPreview";
+import { request } from "../../requests/requests.js";
 
 export default function GeneralPost({
   id,
