@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { URL_BASE } from "../constants/url";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { AiOutlineHeart } from "react-icons/ai";
 
 import Header from "../components/Header-components/Header";
 import { AuthContext } from "../context/auth-context";
@@ -113,7 +112,7 @@ export default function UserPage() {
           </>
         ) : (
           <>
-            <User>
+            <User showText={isLoading}>
               <div className="profile">
                 <img src={posts[0]?.urlImage} />
                 <h1>{posts[0]?.name} posts</h1>
