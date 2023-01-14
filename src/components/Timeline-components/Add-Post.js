@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { URL_BASE } from "../constants/url.js";
-import { AuthContext } from "../context/auth-context.js";
+import { URL_BASE } from "../../constants/url.js";
+import { AuthContext } from "../../context/auth-context.js";
 import Swal from "sweetalert2";
 
 export default function AddPost() {

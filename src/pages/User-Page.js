@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { URL_BASE } from "../constants/url";
 import axios from "axios";
-import Header from "../components/Header";
 import Swal from "sweetalert2";
+import { AiOutlineHeart } from "react-icons/ai";
+
+import Header from "../components/Header-components/Header";
 import { AuthContext } from "../context/auth-context";
 import { isLiked, lika, request } from "../requests/requests.js";
-import { AiOutlineHeart } from "react-icons/ai";
 import Modal from "../components/Timeline-components/Modal";
 import GeneralPost from "../components/Timeline-components/General-Post";
-import NoPostsMessage from "../components/NoPostsMessage";
+import NoPostsMessage from "../components/Timeline-components/NoPostsMessage";
 import LoadingMessage from "../components/Timeline-components/LoadingMessage";
 
 export default function UserPage() {
@@ -79,7 +80,7 @@ export default function UserPage() {
     };
 
     requestLikes();
-  }, [id]);
+  }, [id,refreshTimeline]);
 
   return (
     <>

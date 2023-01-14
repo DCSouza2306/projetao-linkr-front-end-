@@ -1,7 +1,8 @@
-import { SignUpContainer } from "./SignUp-page";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import { SignUpContainer } from "./SignUp-page";
 import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
 

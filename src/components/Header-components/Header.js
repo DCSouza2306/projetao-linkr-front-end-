@@ -3,7 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { AuthContext } from "../context/auth-context";
+import { AuthContext } from "../../context/auth-context";
 import React from "react";
 import SearchBar from "./Search-Bar";
 

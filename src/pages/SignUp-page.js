@@ -2,8 +2,9 @@ import styled from "styled-components";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { URL_BASE } from "../constants/url";
 import Swal from "sweetalert2";
+
+import { URL_BASE } from "../constants/url";
 
 export default function SignUpPage() {
   const [name, setUserName] = useState("");

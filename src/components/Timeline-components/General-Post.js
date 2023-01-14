@@ -9,9 +9,9 @@ import {
 import React, { useState, useEffect, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 import { URL_BASE } from "../../constants/url";
 import { AuthContext } from "../../context/auth-context";
-import Swal from "sweetalert2";
 import Comments from "../Posts-components/Comments";
 import LinkPreview from "../Posts-components/LinkPreview";
 import { request } from "../../requests/requests.js";
@@ -126,6 +126,8 @@ export default function GeneralPost({
 
   const comments = postsComments?.filter((p) => p["post-id"] == id);
   const count = commentsCount?.filter((p) => p["post-id"] == id);
+
+  
   return (
     <>
       <Container

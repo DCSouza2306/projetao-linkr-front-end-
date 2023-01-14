@@ -1,4 +1,5 @@
 import axios from "axios"
+import { URL_BASE } from "../constants/url"
 
 
 
@@ -7,8 +8,8 @@ export const request = async ({config}) => {
 
     try{
         dataRequest = {
-            likesPost: await (await axios.get(`http://localhost:4000/likes`)).data,
-            isLiked: await (await axios.post(`http://localhost:4000/isliked`, {},config)).data
+            likesPost: await (await axios.get(`${URL_BASE}/likes`)).data,
+            isLiked: await (await axios.post(`${URL_BASE}/isliked`, {},config)).data
         }
     }catch(error){
         console.log(error)

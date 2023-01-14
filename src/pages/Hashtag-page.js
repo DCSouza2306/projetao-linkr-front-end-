@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
-import GeneralPost from "../components/General-Post"
-import HashtagBox from "../components/Hashtag-box"
-import Header from "../components/Header"
+
+import HashtagBox from "../components/Timeline-components/Hashtag-box"
+import Header from "../components/Header-components/Header"
 
 
 export default function HashtagPage() {
