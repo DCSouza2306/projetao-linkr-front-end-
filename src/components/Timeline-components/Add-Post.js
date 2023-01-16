@@ -4,11 +4,12 @@ import styled from "styled-components";
 import { URL_BASE } from "../../constants/url.js";
 import { AuthContext } from "../../context/auth-context.js";
 import Swal from "sweetalert2";
+import findHashtags from "find-hashtags";
 
 export default function AddPost() {
   const [linkInput, setLinkInput] = useState("");
   const [contentInput, setContentInput] = useState("");
-  const { userData, refreshTimeline, setRefreshTimeline } =
+  const { userData, refreshTimeline, setRefreshTimeline, hashtags } =
     React.useContext(AuthContext);
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -32,6 +33,10 @@ export default function AddPost() {
       link: linkInput,
       content: contentInput,
     };
+
+    const hashtagsList = findHashtags(contentInput)
+    
+    
     const config = {
       headers: {
         Authorization: `Bearer ${userData.token}`,

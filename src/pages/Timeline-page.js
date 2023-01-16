@@ -12,6 +12,7 @@ import NoPostsMessage from "../components/Timeline-components/NoPostsMessage";
 import { URL_BASE } from "../constants/url";
 import { AuthContext } from "../context/auth-context";
 import { isLiked, lika, request } from "../requests/requests.js";
+import HashtagBox from "../components/Timeline-components/Hashtag-box";
 
 export default function TimelinePage(params) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function TimelinePage(params) {
   const [posts, setPosts] = useState([]);
   const [commentsCount, setCommentsCount] = useState([]);
   const [postsComments, setPostsComments] = useState([]);
-  const { refreshTimeline, setUserData, userData } =
+  const { refreshTimeline, setUserData, userData, hashtags } =
     React.useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("token"));
@@ -29,7 +30,6 @@ export default function TimelinePage(params) {
     headers: { Authorization: `Bearer ${userData.token}` },
   };
   let userId = userData.userId;
-
   function closeModal() {
     setModalIsOpen(false);
   }
@@ -96,32 +96,35 @@ export default function TimelinePage(params) {
           />
         ) : null}
 
-        <AddPost />
-        {isLoading && <LoadingMessage />}
-        {posts.length === 0 && isLoading === false ? (
-          <NoPostsMessage />
-        ) : (
-          posts.map((p, i) => (
-            <GeneralPost
-              key={i}
-              id={p.id}
-              userId={p.userId}
-              urlImage={p.urlImage}
-              name={p.name}
-              content={p.content}
-              link={p.link}
-              metaTitle={p.metaTitle}
-              metaDesc={p.metaDesc}
-              metaImage={p.metaImage}
-              postsComments={postsComments}
-              setModalIsOpen={setModalIsOpen}
-              commentsCount={commentsCount}
-              setIdPost={setIdPost}
-              like={lika({ likes, p })}
-              isLiked={isLiked({ listIsLiked, p, userId })}
-            />
-          ))
-        )}
+        <section className="left-container-timeline">
+          <AddPost />
+          {isLoading && <LoadingMessage />}
+          {posts.length === 0 && isLoading === false ? (
+            <NoPostsMessage />
+          ) : (
+            posts.map((p, i) => (
+              <GeneralPost
+                key={i}
+                id={p.id}
+                userId={p.userId}
+                urlImage={p.urlImage}
+                name={p.name}
+                content={p.content}
+                link={p.link}
+                metaTitle={p.metaTitle}
+                metaDesc={p.metaDesc}
+                metaImage={p.metaImage}
+                postsComments={postsComments}
+                setModalIsOpen={setModalIsOpen}
+                commentsCount={commentsCount}
+                setIdPost={setIdPost}
+                like={lika({ likes, p })}
+                isLiked={isLiked({ listIsLiked, p, userId })}
+              />
+            ))
+          )}
+        </section>
+        <HashtagBox />
       </Wrapper>
     </>
   );
@@ -131,8 +134,13 @@ const Wrapper = styled.div`
   background-color: #333333;
   padding-top: 100px;
   width: 100vw;
+  justify-content: center;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   position: relative;
+
+  section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;

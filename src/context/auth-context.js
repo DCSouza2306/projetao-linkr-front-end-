@@ -11,6 +11,7 @@ export function AuthProvider(props) {
 		userId: object?.userId
 	});
 	const [refreshTimeline, setRefreshTimeline] = useState(true);
+	const  hashtags = []
 	return (
 		<AuthContext.Provider
 			value={{
@@ -18,6 +19,7 @@ export function AuthProvider(props) {
 				setUserData,
 				refreshTimeline,
 				setRefreshTimeline,
+				hashtags
 			}}
 		>
 			{props.children}

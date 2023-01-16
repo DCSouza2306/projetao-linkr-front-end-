@@ -10,11 +10,12 @@ import React, { useState, useEffect, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+
+import { Card } from "../Posts-components/Hashtags";
 import { URL_BASE } from "../../constants/url";
 import { AuthContext } from "../../context/auth-context";
 import Comments from "../Posts-components/Comments";
 import LinkPreview from "../Posts-components/LinkPreview";
-import { request } from "../../requests/requests.js";
 
 export default function GeneralPost({
   id,
@@ -188,7 +189,7 @@ export default function GeneralPost({
                   />
                 </form>
               )}
-              {!openTextArea && <p className="a">{content}</p>}
+              {!openTextArea && <Card >{content}</Card>}
             </div>
           </div>
           <div className="linkEmbed">
@@ -310,7 +311,10 @@ const Container = styled.div`
     width: 85%;
     overflow-wrap: break-word;
 
+
+
     .name{
+      font-size: 19px;
       cursor: pointer;
     }
 
